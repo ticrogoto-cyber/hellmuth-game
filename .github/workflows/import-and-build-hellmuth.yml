@@ -1,4 +1,4 @@
-name: Import and Build HELLMUTH
+name: Validate HELLMUTH Build
 
 on:
   push:
@@ -10,12 +10,8 @@ on:
 permissions:
   contents: write
 
-env:
-  SOURCE_REPO: https://github.com/ticrogoto-cyber/Higgsfield-.git
-  SOURCE_BRANCH: claude/quirky-fermat-8rewv0
-
 jobs:
-  import-build-commit:
+  validate-build-commit:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout hellmuth-game
@@ -23,56 +19,6 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
-
-      - name: Import selected hellmuth files
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          tmp="$(mktemp -d)"
-          git clone --branch "$SOURCE_BRANCH" --single-branch --depth 1 --filter=blob:none --sparse "$SOURCE_REPO" "$tmp/source"
-          git -C "$tmp/source" sparse-checkout set --no-cone \
-            '/hellmuth/src/' \
-            '/hellmuth/assets/' \
-            '/hellmuth/package.json' \
-            '/hellmuth/tsconfig.json' \
-            '/hellmuth/vite.config.ts' \
-            '/hellmuth/index.html' \
-            '/hellmuth/docs/' \
-            '/hellmuth/.github/' \
-            '/hellmuth/game/data/' \
-            '/hellmuth/data/maps/'
-
-          src="$tmp/source/hellmuth"
-          test -d "$src/src"
-          test -d "$src/assets"
-          test -f "$src/package.json"
-          test -f "$src/tsconfig.json"
-          test -f "$src/vite.config.ts"
-          test -f "$src/index.html"
-
-          rm -rf src assets docs game data package.json package-lock.json tsconfig.json vite.config.ts index.html proof proof3d dist node_modules
-
-          cp -R "$src/src" ./src
-          cp -R "$src/assets" ./assets
-          cp "$src/package.json" ./package.json
-          cp "$src/tsconfig.json" ./tsconfig.json
-          cp "$src/vite.config.ts" ./vite.config.ts
-          cp "$src/index.html" ./index.html
-          if [ -d "$src/docs" ]; then cp -R "$src/docs" ./docs; fi
-          if [ -d "$src/.github" ]; then cp -R "$src/.github/." ./.github/; fi
-
-          # Required by static imports in src/. Without these JSON files the game code does not typecheck.
-          if [ -d "$src/game" ]; then cp -R "$src/game" ./game; fi
-          if [ -d "$src/data" ]; then cp -R "$src/data" ./data; fi
-
-          rm -rf proof proof3d dist node_modules
-
-          cat > .gitignore <<'EOF'
-          node_modules/
-          dist/
-          .DS_Store
-          EOF
 
       - name: Install dependencies
         run: npm install
@@ -91,25 +37,23 @@ jobs:
 
           ## Was funktioniert
 
-          - Der selektive Import aus `ticrogoto-cyber/Higgsfield-`, Branch `claude/quirky-fermat-8rewv0`, wurde remote auf GitHub ausgefuehrt.
-          - Importiert wurden die wichtigen Spieldateien aus `hellmuth/`: `src/`, `assets/`, `package.json`, `tsconfig.json`, `vite.config.ts`, `index.html` und `docs/`.
-          - `npm install` laeuft erfolgreich.
+          - `npm install` laeuft erfolgreich auf GitHub Actions.
           - `npx tsc --noEmit` laeuft ohne TypeScript-Fehler.
           - `npm run build` liefert Exitcode 0.
-          - Das Projekt bleibt ein Phaser 3 + Vite + TypeScript Spiel mit den Fraktionen HELLMUTH und MODERAT.
+          - Die wichtigen Game-Dateien liegen im Repo `ticrogoto-cyber/hellmuth-game` auf Branch `main`.
+          - Das Projekt ist ein Phaser 3 + Vite + TypeScript Spiel mit den Fraktionen HELLMUTH und MODERAT.
 
           ## Was gefixt wurde
 
-          - Fehlende JSON-Daten fuer statische Imports wurden als notwendige Build-Abhaengigkeiten uebernommen: `game/data/` und `data/maps/`.
-          - `.gitignore` wurde ergaenzt, damit `node_modules/` und `dist/` nicht committed werden.
-          - Der Import und Build laufen auf GitHub Actions, nicht lokal auf einem Computer.
+          - Fehlende Build-Abhaengigkeiten aus dem Spielcode liegen im Repo: `game/data/` und `data/maps/`.
+          - `package-lock.json` ist vorhanden, damit Installationen reproduzierbar sind.
+          - `.gitignore` verhindert, dass `node_modules/` und `dist/` committed werden.
+          - Der Build wurde auf GitHub Actions validiert, ohne lokale Dateien auf einem Computer anzulegen.
 
-          ## Nicht uebernommen
+          ## Hinweise
 
-          - Nichts ausserhalb von `hellmuth/` aus dem Quellrepo.
-          - Kein `node_modules/`.
-          - Kein `dist/`.
-          - Keine Top-Level-Ordner `proof/` oder `proof3d/`.
+          - `node_modules/` und `dist/` werden nicht committed.
+          - Der Validierungs-Workflow entfernt sich nach erfolgreichem Commit selbst.
           EOF
 
       - name: Commit and push result
@@ -125,5 +69,5 @@ jobs:
             echo "No changes to commit."
             exit 0
           fi
-          git commit -m "init: selektiver Import aus Higgsfield"
+          git commit -m "chore: validate build and document status"
           git push origin main
