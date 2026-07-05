@@ -1,0 +1,60 @@
+{
+  "sources": {
+    "procedural": {
+      "license": "MIT (Eigenwerk)",
+      "clip_count": 5,
+      "clips": [
+        {
+          "name": "drone_hover",
+          "file": "procedural/drone_hover.glb",
+          "format": "glb",
+          "bytes": 52272,
+          "license_sidecar": false
+        },
+        {
+          "name": "hover_idle",
+          "file": "procedural/hover_idle.glb",
+          "format": "glb",
+          "bytes": 16004,
+          "license_sidecar": false
+        },
+        {
+          "name": "insect_scurry",
+          "file": "procedural/insect_scurry.glb",
+          "format": "glb",
+          "bytes": 119564,
+          "license_sidecar": false
+        },
+        {
+          "name": "plant_grow",
+          "file": "procedural/plant_grow.glb",
+          "format": "glb",
+          "bytes": 48796,
+          "license_sidecar": false
+        },
+        {
+          "name": "plant_sway",
+          "file": "procedural/plant_sway.glb",
+          "format": "glb",
+          "bytes": 49676,
+          "license_sidecar": false
+        }
+      ]
+    },
+    "humanoid": {
+      "license": "Mixamo royalty-free / CMU permissive",
+      "clip_count": 0,
+      "clips": []
+    },
+    "quadruped": {
+      "license": "Truebones royalty-free",
+      "clip_count": 0,
+      "clips": []
+    },
+    "templates": {
+      "license": "Skelett-Templates (kein Clip)",
+      "clip_count": 0,
+      "clips": []
+    }
+  }
+}

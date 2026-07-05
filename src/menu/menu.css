@@ -1,0 +1,123 @@
+/* menu.css — Stamm und Buehne der Menue-Familie. Tokens/Schrift aus
+ * design_system.css. Eigener DOM-Stamm #hellmuth-menu, z-index ueber HUD (10)
+ * und Florilegium (9000). */
+
+#hellmuth-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: "Printvetica", system-ui, sans-serif;
+}
+
+.menu-stage {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/* Gemeinsames Bildschirm-Geruest fuer Subviews. Stueck-Topbar oben (Back-
+ * Pfeil + Wortmarke), darunter scrollbarer Inhalt. */
+.menu-screen {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: 56px 1fr auto;
+  grid-template-areas:
+    "topbar"
+    "main"
+    "actions";
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* Sticky-Topbar mit Back-Pfeil (Subagent #12) */
+.menu-topbar {
+  grid-area: topbar;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-s);
+  padding: 0 var(--space-2xl);
+  border-bottom: 1px solid var(--divider);
+  background: var(--bg-primary);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.menu-back {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  background: transparent;
+  border: 0;
+  color: var(--text-secondary);
+  padding: var(--space-xs) var(--space-s);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.menu-back:hover {
+  color: var(--accent);
+}
+.menu-back-arrow {
+  font-size: 28px;
+  line-height: 1;
+}
+.menu-topbar-mark {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: center;
+}
+.menu-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  justify-self: end;
+}
+
+.menu-screen-main {
+  grid-area: main;
+  padding: var(--space-2xl) var(--space-3xl);
+  overflow-y: auto;
+}
+.menu-screen-inner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.menu-screen-title {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 700;
+  font-size: 42px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-xl) 0;
+}
+
+/* Actions-Leiste unten (sticky, Subagent #2): Primaer-Button rechts. */
+.menu-actions {
+  grid-area: actions;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+  padding: var(--space-s) var(--space-2xl);
+  border-top: 1px solid var(--divider);
+  background: var(--bg-primary);
+  position: sticky;
+  bottom: 0;
+}
+.menu-actions-right {
+  display: flex;
+  gap: var(--space-s);
+  margin-left: auto;
+}

@@ -1,0 +1,5 @@
+{
+  "botanicals": { "label": "Botanicals", "start": 1000 },
+  "reinwasser": { "label": "Reinwasser", "start": 600 },
+  "destillat": { "label": "Destillat", "start": 0 }
+}

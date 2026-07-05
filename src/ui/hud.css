@@ -1,0 +1,410 @@
+/* HELLMUTH HTML/CSS-HUD — Masswahrheit: docs/hud-zustand-1/2.png (8000x4500,
+   Faktor 4.1667), Zahlen in docs/hud-spec.md (Neuvermessung 12.06.).
+   vw = px/19.2, vh = px/10.8. Ornamentstaerke 15 px, Rahmen AUSSEN am Panel.
+   Ornament ist nie Flachfarbe: Rahmen aus frame.png (Nine-Slice aus dem
+   Linienprofil), Leistenkoerper aus den fetten Streifen, Korn als Overlay. */
+
+#hud {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  /* EIN uniformer Skalenfaktor (Paket C, Teil 1): min() = Letterbox, zwingt
+     beide Achsen auf denselben Faktor -> vw/vh koennen bei 21:9/4:3/Hochformat
+     nicht mehr divergieren. 1 Einheit = 1 Design-Pixel (1920x1080). Bemassung
+     ueber calc(px * --hud-scale) — der Layer wird NICHT als Ganzes hochskaliert
+     (das cacht + zeichnet Text/1px-Linien weich); nur translate zum Zentrieren. */
+  --hud-scale: min(100vw / 1920, 100vh / 1080);
+  font-family: "Barlow Condensed", "Arial Narrow", "Liberation Sans Narrow",
+    "DejaVu Sans Condensed", system-ui, sans-serif;
+  color: var(--ink);
+  user-select: none;
+  -webkit-user-select: none;
+  --ornW: calc(15 * var(--hud-scale));  /* 15px horizontal */
+  --ornH: calc(15 * var(--hud-scale));  /* 15px vertikal */
+}
+/* Anker-Layout (HUD-Anker): die vier Eck-Panels haengen an den ECHTEN Viewport-
+   Ecken (direkte #hud-Kinder, unten); NUR die zentrale Einheitenkarte + ihre
+   Ornamente (Koenig, Siegel, Eckknoten, gridres-Begleiter) sitzen in dieser
+   zentrierten, unten-buendigen 1920x1080-Buehne. Uniform skaliert (nur translate,
+   kein scale). Leiste + Korn liegen volle Bildbreite davor (V3 §1.1). Bei 16:9
+   ist die Buehne = Viewport -> alles deckungsgleich zur Spec. */
+#hud .hud-stage {
+  position: absolute; left: 50%; bottom: 0;
+  width: calc(1920 * var(--hud-scale)); height: calc(1080 * var(--hud-scale));
+  transform: translateX(-50%);
+}
+#hud.faction-hellmuth {
+  /* --income gedaempft (kein zweites gruenes Eigenleuchten neben dem Koenig-Orb,
+     §9): Mattgold statt Leuchtgruen. */
+  --frame: #c4a23c; --glow: #ffd25a; --ink: #efe6c8; --muted: #b9ad84;
+  --panel: #0e0e0c; --panel-bg: rgba(14, 14, 12, 0.95); --income: #b3a06a;
+}
+#hud.faction-moderat {
+  /* --glow leicht entschaerft, --income gedaempft: das Auge des Koenigs bleibt
+     der hellste Magenta-Punkt (Leucht-Exklusivitaet, §9). */
+  --frame: #7a3a68; --glow: #a248a6; --ink: #f4d6ee; --muted: #b894b2;
+  --panel: #1a1418; --panel-bg: rgba(26, 20, 24, 0.95); --income: #b094aa;
+}
+/* (Paket B) Das alte Entsaettigungs-Pflaster auf .panel::before ist entfallen:
+   die Faerbung traegt jetzt die luminanzerhaltende SVG-Toenung (hud_tint) ueber
+   dem Graustufen-Master, nicht ein gebackenes, uebersaettigtes Magenta. */
+/* Emblem-Marke + Menue leicht entsaettigen: zweiter satter Magenta-Pol oben
+   (Kritiker, ein-Akzent-Doktrin) -> das Koenig-Auge bleibt der einzige Pol. */
+#hud.faction-moderat .emb-mark, #hud.faction-moderat .menu-text { filter: saturate(0.78); }
+#hud.zonemap .emb-mark, #hud.zonemap .menu-text { filter: none !important; }
+
+/* ---------- Durchgehende untere Leiste (V3 §1.1) ---------- */
+/* EIN getoenter Bar-Rapport (Graustufen-Master), per `background-repeat: round`
+   gekachelt -> waechst mit der Bildbreite, keine Auto-Streckung, kein
+   angeschnittener Endkachel. Bild + Kachelbreite setzt bottomBar(). Ersetzt die
+   alte Segment-Maschinerie; die Panelkanten tragen die Panel-Rahmen selbst. */
+#hud .hud-bar {
+  position: absolute; left: 0; right: 0; bottom: 0; height: calc(92 * var(--hud-scale));
+  background-color: var(--panel);
+  background-repeat: round;
+  pointer-events: auto; /* sichtbare Bodenleiste schluckt Welt-Klicks (Paket D) */
+}
+
+/* ---------- Panel-Grundgerippe ---------- */
+/* Panel-Rechteck = reine Grundflaeche; 15px-Ornamentrahmen liegt AUSSEN
+   (::before, border-image aus dem gebackenen Linienprofil, keine Flachfarbe). */
+/* Panelgrund 5% transparent (Deckkraft exakt 0.95, Ancestors-Legacy-Effekt):
+   NUR die grau codierten Grundflaechen; Rahmen, Leisten, Ornamente, Buttons,
+   Icons, Texte, Portraets bleiben voll deckend (Sockel/Riser nutzen weiter
+   das deckende --panel). */
+#hud .panel {
+  position: absolute;
+  box-sizing: border-box;
+  background: var(--panel-bg);
+  /* Klick-Geometrie (Paket D): die sichtbare Panel-Flaeche schluckt Welt-Klicks
+     (kein Durchklicken auf verdeckte Einheiten). Die transparenten Stage-Luecken
+     bleiben pointer-events:none -> Klicks gehen zur Welt durch. */
+  pointer-events: auto;
+}
+/* Kanten-differenzierte Leisten (HUD-Reparatur): vier getoente Hintergrund-Lagen
+   statt eines uniformen border-image. Oberkante (offene Leiste) ragt hoeher als
+   die geschlossene Unterkante; Seiten als eigene Vertikale. Die Horizontalen
+   liegen oben im Stapel und tragen die Ecken (Eck-Verschmelzung). */
+#hud .panel::before {
+  content: "";
+  position: absolute;
+  inset: calc(-15 * var(--hud-scale));
+  background:
+    var(--strip-bot) top / auto calc(15 * var(--hud-scale)) repeat-x,
+    var(--strip-bot) bottom / auto calc(15 * var(--hud-scale)) repeat-x,
+    var(--strip-side) left / calc(15 * var(--hud-scale)) auto repeat-y,
+    var(--strip-side) right / calc(15 * var(--hud-scale)) auto repeat-y;
+  pointer-events: none;
+}
+/* F-Fix: NUR HELLMUTHs drei Hauptpanels tragen die offene 26px-Oberkante (--strip-top
+   = h_b). Emblem/Menue + ganz MODERAT bleiben oben geschlossen (15px, Default --strip-bot). */
+#hud.faction-hellmuth .p-minimap::before,
+#hud.faction-hellmuth .p-unitcard::before,
+#hud.faction-hellmuth .p-resources::before {
+  inset: calc(-26 * var(--hud-scale)) calc(-15 * var(--hud-scale)) calc(-15 * var(--hud-scale));
+  background:
+    var(--strip-top) top / auto calc(26 * var(--hud-scale)) repeat-x,
+    var(--strip-bot) bottom / auto calc(15 * var(--hud-scale)) repeat-x,
+    var(--strip-side) left / calc(15 * var(--hud-scale)) auto repeat-y,
+    var(--strip-side) right / calc(15 * var(--hud-scale)) auto repeat-y;
+}
+
+/* ---------- Emblem (0,0 279x96) ---------- */
+#hud .p-emblem { left: 0; top: 0; width: calc(279.001 * var(--hud-scale)); height: calc(96.0001 * var(--hud-scale)); }
+#hud .emb-mark { position: absolute; left: calc(21.001 * var(--hud-scale)); top: calc(15.0001 * var(--hud-scale));
+  width: calc(64.9997 * var(--hud-scale)); height: calc(64.9998 * var(--hud-scale));
+  background-position: center; background-size: contain; background-repeat: no-repeat; }
+#hud .emb-name { position: absolute; left: calc(99.001 * var(--hud-scale)); top: calc(19.0004 * var(--hud-scale));
+  width: calc(159.001 * var(--hud-scale)); height: calc(36.9997 * var(--hud-scale)); overflow: hidden;
+  font-size: calc(29.16 * var(--hud-scale)); line-height: calc(36.9997 * var(--hud-scale)); font-weight: 700; color: var(--glow); }
+#hud .emb-claim { position: absolute; left: calc(99.001 * var(--hud-scale)); top: calc(61.9996 * var(--hud-scale));
+  width: calc(159.001 * var(--hud-scale)); height: calc(15.0001 * var(--hud-scale)); overflow: hidden;
+  font-size: calc(11.34 * var(--hud-scale)); line-height: calc(15.0001 * var(--hud-scale)); color: var(--muted); white-space: nowrap; }
+
+/* Zier-Eckstueck (Paket C, Teil 2): KIND des Emblem-Panels, sitzt AUF der
+   Box-Ecke (nicht im Schirm). Raw-Asset (fertig beleuchtet, keine Toenung),
+   Groesse via --hud-scale. Spiegelung fuer andere Ecken per scaleX/scaleY. */
+#hud .emb-corner {
+  position: absolute; left: 0; top: 0; z-index: 6;
+  width: calc(168 * var(--hud-scale)); height: calc(168 * var(--hud-scale));
+  transform: translate(-38%, -38%);
+  background-position: left top; background-size: contain; background-repeat: no-repeat;
+  filter: drop-shadow(calc(2 * var(--hud-scale)) calc(2 * var(--hud-scale))
+          calc(3 * var(--hud-scale)) rgba(0, 0, 0, 0.55));
+  pointer-events: none;
+}
+
+/* ---------- Menue (1781,0 139x48), Textzone 113x27 @ (1794,11) ---------- */
+#hud .p-menu { right: 0; top: 0; width: calc(139.0003 * var(--hud-scale)); height: calc(47.9995 * var(--hud-scale)); }
+#hud .menu-text { position: absolute; left: calc(13.0003 * var(--hud-scale)); top: calc(10.9998 * var(--hud-scale));
+  width: calc(112.9997 * var(--hud-scale)); height: calc(27 * var(--hud-scale)); overflow: hidden;
+  display: flex; align-items: center; justify-content: center; gap: calc(9.6 * var(--hud-scale));
+  color: var(--glow); font-weight: 700; font-size: calc(21.6 * var(--hud-scale));
+  pointer-events: auto; cursor: pointer; }
+#hud .menu-text .menu-label { letter-spacing: 0.06em; }
+
+/* ---------- Minimap (16,779 286x286) ---------- */
+#hud .p-minimap { left: calc(16 * var(--hud-scale)); bottom: calc(15 * var(--hud-scale)); width: calc(285.9994 * var(--hud-scale)); height: calc(286.0002 * var(--hud-scale));
+  pointer-events: auto; }
+#hud .p-minimap .mm-canvas { position: absolute; inset: 0;
+  width: 100%; height: 100%; image-rendering: pixelated; cursor: pointer; }
+
+/* ---------- Einheitenkarte (521,824 878x241) ---------- */
+#hud .p-unitcard { left: calc(520.9997 * var(--hud-scale)); top: calc(824 * var(--hud-scale)); width: calc(878.0006 * var(--hud-scale)); height: calc(240.9998 * var(--hud-scale)); }
+#hud .uc-single, #hud .uc-multi { position: absolute; inset: 0; }
+#hud .uc-single > *, #hud .uc-multi > * { position: absolute; }
+
+/* Zustand 1 (Einzelauswahl) */
+#hud .uc-portrait { left: calc(13.0003 * var(--hud-scale)); top: calc(11.9999 * var(--hud-scale)); width: calc(153.9994 * var(--hud-scale)); height: calc(216 * var(--hud-scale));
+  background: #0a0a0a; box-shadow: inset 0 0 0 calc(2.0006 * var(--hud-scale)) var(--frame);
+  display: flex; align-items: flex-end; justify-content: center;
+  color: var(--muted); font-size: calc(12.96 * var(--hud-scale)); }
+#hud .uc-name { left: calc(190.9997 * var(--hud-scale)); top: calc(11.9999 * var(--hud-scale)); width: calc(231.9994 * var(--hud-scale)); height: calc(29.0002 * var(--hud-scale));
+  overflow: hidden; font-size: calc(25.92 * var(--hud-scale)); line-height: calc(29.0002 * var(--hud-scale)); font-weight: 700;
+  color: var(--glow); white-space: nowrap; text-overflow: ellipsis; }
+#hud .uc-sub { left: calc(190.9997 * var(--hud-scale)); top: calc(45.0004 * var(--hud-scale)); width: calc(171.001 * var(--hud-scale)); height: calc(20.9995 * var(--hud-scale));
+  overflow: hidden; font-size: calc(14.58 * var(--hud-scale)); line-height: calc(20.9995 * var(--hud-scale)); color: var(--muted);
+  white-space: nowrap; text-overflow: ellipsis; }
+
+#hud .uc-stat-icon { left: calc(190.9997 * var(--hud-scale)); width: calc(21.001 * var(--hud-scale)); height: calc(20.9995 * var(--hud-scale));
+  background-position: center; background-size: contain; background-repeat: no-repeat; }
+#hud .uc-stat-val { left: calc(224.0006 * var(--hud-scale)); width: calc(82.9997 * var(--hud-scale)); height: calc(21.9996 * var(--hud-scale));
+  overflow: hidden; font-size: calc(13.5 * var(--hud-scale)); line-height: calc(21.9996 * var(--hud-scale)); font-weight: 600;
+  font-variant-numeric: tabular-nums; white-space: nowrap; }
+#hud .uc-stat-icon.s0, #hud .uc-stat-val.s0 { top: calc(94 * var(--hud-scale)); }
+#hud .uc-stat-icon.s1, #hud .uc-stat-val.s1 { top: calc(126.0004 * var(--hud-scale)); }
+#hud .uc-stat-icon.s2, #hud .uc-stat-val.s2 { top: calc(157.9997 * var(--hud-scale)); }
+#hud .uc-stat-icon.s3, #hud .uc-stat-val.s3 { top: calc(190.0001 * var(--hud-scale)); }
+
+#hud .uc-eff-head { left: calc(363.001 * var(--hud-scale)); top: calc(94 * var(--hud-scale)); width: calc(154.9997 * var(--hud-scale)); height: calc(21.9996 * var(--hud-scale));
+  overflow: hidden; font-size: calc(15.12 * var(--hud-scale)); line-height: calc(21.9996 * var(--hud-scale)); font-weight: 700;
+  color: var(--glow); letter-spacing: 0.04em; }
+#hud .uc-eff-icon { left: calc(363.001 * var(--hud-scale)); width: calc(36 * var(--hud-scale)); height: calc(35.9996 * var(--hud-scale));
+  background-position: center; background-size: contain; background-repeat: no-repeat; }
+#hud .uc-eff-icon.f0 { top: calc(122 * var(--hud-scale)); }
+#hud .uc-eff-icon.f1 { top: calc(164.0002 * var(--hud-scale)); }
+/* Je Eintrag zwei Zeilen 109x15 @ x=929 (Vorlage) */
+#hud .uc-eff-line { left: calc(408 * var(--hud-scale)); width: calc(109.0003 * var(--hud-scale)); height: calc(15.0001 * var(--hud-scale));
+  overflow: hidden; font-size: calc(13.5 * var(--hud-scale)); line-height: calc(15.0001 * var(--hud-scale)); color: var(--ink); }
+#hud .uc-eff-line.f0.la { top: calc(122 * var(--hud-scale)); }
+#hud .uc-eff-line.f0.lb { top: calc(142.9996 * var(--hud-scale)); color: var(--muted); }
+#hud .uc-eff-line.f1.la { top: calc(164.0002 * var(--hud-scale)); }
+#hud .uc-eff-line.f1.lb { top: calc(184.9997 * var(--hud-scale)); color: var(--muted); }
+
+/* Zustand 2 (Mehrfachauswahl): 4 Portraets 121x169 + Labels 60x21 */
+#hud .uc-multi { display: none; }
+#hud .uc-mp { top: calc(11.9999 * var(--hud-scale)); width: calc(121.0003 * var(--hud-scale)); height: calc(168.9995 * var(--hud-scale));
+  background: #0a0a0a; box-shadow: inset 0 0 0 calc(2.0006 * var(--hud-scale)) var(--frame); }
+#hud .uc-ml { top: calc(190.0001 * var(--hud-scale)); width: calc(60 * var(--hud-scale)); height: calc(20.9995 * var(--hud-scale));
+  overflow: hidden; font-size: calc(12.96 * var(--hud-scale)); line-height: calc(20.9995 * var(--hud-scale)); text-align: center;
+  color: var(--muted); white-space: nowrap; }
+#hud .uc-mp.p0 { left: calc(13.0003 * var(--hud-scale)); }  #hud .uc-ml.p0 { left: calc(43.0003 * var(--hud-scale)); }
+#hud .uc-mp.p1 { left: calc(147.001 * var(--hud-scale)); }  #hud .uc-ml.p1 { left: calc(177.001 * var(--hud-scale)); }
+#hud .uc-mp.p2 { left: calc(282 * var(--hud-scale)); } #hud .uc-ml.p2 { left: calc(312 * var(--hud-scale)); }
+#hud .uc-mp.p3 { left: calc(416.0006 * var(--hud-scale)); } #hud .uc-ml.p3 { left: calc(446.0006 * var(--hud-scale)); }
+
+#hud.select-multi .uc-single { display: none; }
+#hud.select-multi .uc-multi { display: block; }
+
+/* Befehlsraster 4x3 @ (1094,836), Zelle 65x65, Raster 75.5 */
+#hud .uc-cmd { position: absolute; left: calc(573.001 * var(--hud-scale)); top: calc(11.9999 * var(--hud-scale));
+  width: calc(291.5002 * var(--hud-scale)); height: calc(216 * var(--hud-scale));
+  display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr);
+  column-gap: calc(10.5005 * var(--hud-scale)); row-gap: calc(10.4998 * var(--hud-scale)); }
+#hud .cmd-cell {
+  position: relative; margin: 0; padding: 10% 9% 8%; border: 0;
+  background: var(--cell-img) center / 100% 100% no-repeat;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(3.24 * var(--hud-scale));
+  cursor: pointer; color: inherit; overflow: hidden; pointer-events: auto;
+}
+#hud .cmd-cell .cmd-label { font-size: calc(9.18 * var(--hud-scale)); line-height: 1.1; font-weight: 600;
+  text-transform: uppercase; text-align: center; max-width: 100%; pointer-events: none;
+  white-space: normal; word-break: break-word; max-height: calc(21.6 * var(--hud-scale)); overflow: hidden; }
+#hud .cmd-cell:hover { filter: brightness(1.12); box-shadow: inset 0 0 calc(11.88 * var(--hud-scale)) calc(1.08 * var(--hud-scale)) var(--glow); }
+#hud .cmd-cell:active { filter: brightness(0.85); }
+#hud .cmd-cell.empty { background: #0b0b0b; cursor: default; } /* deckend: Buttons/Zellen ohne Durchschein */
+#hud .cmd-cell.disabled { filter: grayscale(0.7) brightness(0.6); cursor: default; pointer-events: none; }
+#hud .cmd-cell.disabled .cmd-label { color: var(--muted); }
+
+/* ---------- Ressourcen (1616,836 174x216) ---------- */
+#hud .p-resources { right: calc(130 * var(--hud-scale)); bottom: calc(15 * var(--hud-scale)); width: calc(174 * var(--hud-scale)); height: calc(216 * var(--hud-scale)); }
+#hud .res-icon { position: absolute; left: calc(14.0006 * var(--hud-scale)); width: calc(38.0006 * var(--hud-scale)); height: calc(37.9998 * var(--hud-scale));
+  background-position: center; background-size: contain; background-repeat: no-repeat; }
+/* H (Entscheidung A): Ressourcen-Zahlen LINKSBUENDIG, Tabellenziffern (kein
+   Wackeln), vertikal auf die Mitte der Icon-Box zentriert. Werkstueck 0: ausgewogener
+   Abstand zum Symbol — Icon-Kante bei x=52 (14+38), Zahl ab x=64 (~12px Luft), damit
+   die Zahl nicht am Icon klebt. Box endet rechts weiter 13.423*s vor der aeusseren
+   Leiste (Panelkante 174 - 13.423 = 160.577 -> Breite 96.58); 5 Stellen passen sicher.
+   Genauer Abstand am Bild von Ticro abgenommen (schoen ist kein Maschinen-Urteil). */
+#hud .res-val { position: absolute; left: calc(64 * var(--hud-scale)); width: calc(96.58 * var(--hud-scale)); height: calc(22.9997 * var(--hud-scale));
+  overflow: hidden; font-size: calc(18 * var(--hud-scale)); line-height: calc(22.9997 * var(--hud-scale)); font-weight: 700;
+  display: flex; justify-content: flex-start; align-items: center;
+  font-variant-numeric: tabular-nums; white-space: nowrap; }
+#hud .res-icon.q0 { top: calc(15.0001 * var(--hud-scale)); }  #hud .res-val.q0 { top: calc(22.9997 * var(--hud-scale)); }
+#hud .res-icon.q1 { top: calc(64.9998 * var(--hud-scale)); }  #hud .res-val.q1 { top: calc(73.0004 * var(--hud-scale)); }
+#hud .res-icon.q2 { top: calc(114.0005 * var(--hud-scale)); } #hud .res-val.q2 { top: calc(122 * var(--hud-scale)); }
+#hud .res-icon.q3 { top: calc(163.0001 * var(--hud-scale)); } #hud .res-val.q3 { top: calc(170.9996 * var(--hud-scale)); }
+
+/* ====================================================================
+   Ornament-Layer (Abschnitt 4) — Bloecke, Ecke, Schmuck, Streifen.
+   Kontaktschatten via drop-shadow (folgt der Alpha-Silhouette).
+   Liegt im DOM VOR den Panels -> Panels decken den Streifen ab.
+   ==================================================================== */
+/* KEIN z-index: Panels kommen im DOM spaeter und decken Streifen/Layer ab.
+   (z-index:1 hier hatte den Streifen ueber die Panels gehoben — Gate-Befund.) */
+#hud .orn-layer { position: absolute; inset: 0; pointer-events: none; }
+#hud .orn-layer > div {
+  background-position: center bottom; background-size: contain; background-repeat: no-repeat;
+}
+
+/* Puls-Keyframes: vom lebenden v2-Koenig-System genutzt (.v2-koenig.orn-pulse,
+   siehe unten). Das alte orn-koenig/orn-king-* CSS-Subsystem ist abgerissen,
+   da die Laufzeit ausschliesslich v2-* Klassen emittiert (html_hud.ts). */
+@keyframes orn-pulse-aura { 0%, 100% { opacity: 0.26; } 50% { opacity: 0.54; } }
+@keyframes orn-pulse-disc { 0%, 100% { opacity: 0.16; } 50% { opacity: 0.40; } }
+
+/* ====================================================================
+   HUD-V2 Bluetenebene (S2, docs/hud-spec-v2.md) — rahmenlose Blueten in die
+   vier Slots, unten an y1080 verankert. Liegt im DOM VOR den Panels.
+   ==================================================================== */
+/* Schlankes vertikales Beifuellmotiv (Rohr/Ranke), kachelt nach oben bis fillTop,
+   liegt HINTER dem Hauptmotiv -> liest als aus der Leiste gewachsene Saeule. */
+#hud .v2-fill {
+  position: absolute; bottom: 0; z-index: 0;
+  background-repeat: repeat-y; background-position: center bottom; background-size: 100% auto;
+  filter: drop-shadow(calc(0.96 * var(--hud-scale)) calc(1.08 * var(--hud-scale)) calc(2.304 * var(--hud-scale)) rgba(0, 0, 0, 0.5));
+}
+#hud .v2-bloom {
+  position: absolute; bottom: 0; z-index: 1;
+  background-repeat: no-repeat; background-position: center bottom; background-size: contain;
+  filter: drop-shadow(calc(1.536 * var(--hud-scale)) calc(1.728 * var(--hud-scale)) calc(3.072 * var(--hud-scale)) rgba(0, 0, 0, 0.6));
+}
+/* MODERAT Stahl-Eckknoten (matt, leuchtfrei) an den Kartenoberecken. */
+#hud .v2-corner {
+  position: absolute; z-index: 7;
+  background-repeat: no-repeat; background-position: center; background-size: contain;
+  filter: drop-shadow(calc(0.96 * var(--hud-scale)) calc(1.08 * var(--hud-scale)) calc(1.92 * var(--hud-scale)) rgba(0, 0, 0, 0.5));
+}
+#hud .v2-topleft {
+  position: absolute;
+  background-repeat: no-repeat; background-position: left top; background-size: contain;
+  filter: drop-shadow(calc(1.536 * var(--hud-scale)) calc(1.728 * var(--hud-scale)) calc(3.072 * var(--hud-scale)) rgba(0, 0, 0, 0.55));
+}
+#hud .v2-sigil {
+  position: absolute; z-index: 8;
+  background-repeat: no-repeat; background-position: center; background-size: contain;
+  filter: drop-shadow(calc(0.96 * var(--hud-scale)) calc(1.08 * var(--hud-scale)) calc(1.92 * var(--hud-scale)) rgba(0, 0, 0, 0.5));
+}
+#hud .v2-koenig { position: absolute; bottom: 0; z-index: 8; pointer-events: none; }
+#hud .v2-king-ground {
+  position: absolute; z-index: 0; left: 8%; right: 8%; bottom: -calc(2.16 * var(--hud-scale)); height: calc(32.4 * var(--hud-scale));
+  background: radial-gradient(ellipse 58% 100% at 50% 100%,
+              rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.28) 46%, transparent 76%);
+  filter: blur(calc(1.296 * var(--hud-scale)));
+}
+#hud .v2-king-art {
+  position: absolute; z-index: 1; bottom: 0; left: 50%; transform: translateX(-50%);
+  background-repeat: no-repeat; background-position: center bottom; background-size: contain;
+  filter: drop-shadow(calc(3.072 * var(--hud-scale)) calc(4.32 * var(--hud-scale)) calc(9.6 * var(--hud-scale)) rgba(0, 0, 0, 0.78));
+}
+/* HELLMUTH Kugel-Puls auf dem Orb (--kx/--ky/--kr = % der Art-Box). */
+#hud .v2-king-hellmuth { --pulse-rgb: 130, 235, 105; }
+#hud .v2-aura, #hud .v2-disc {
+  position: absolute; left: var(--kx); top: var(--ky); transform: translate(-50%, -50%);
+  mix-blend-mode: screen; opacity: 0; pointer-events: none;
+}
+#hud .v2-aura {
+  width: calc(var(--kr) * 3.6); aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(var(--pulse-rgb), 0.9) 0%,
+              rgba(var(--pulse-rgb), 0.35) 45%, transparent 70%);
+}
+#hud .v2-disc {
+  width: calc(var(--kr) * 2); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--pulse-rgb), 0.85) 0%,
+              rgba(var(--pulse-rgb), 0.4) 55%, transparent 78%);
+}
+#hud .v2-koenig.orn-pulse .v2-aura { animation: orn-pulse-aura 7s ease-in-out infinite; }
+#hud .v2-koenig.orn-pulse .v2-disc { animation: orn-pulse-disc 7s ease-in-out infinite; }
+/* MODERAT Iris-Scheibe im Porthole (Sakkade per JS) + fixer Reflex. Magenta-
+   Glorienschein um die Iris, damit das Auge der hellste Punkt im HUD bleibt. */
+#hud .v2-iris {
+  position: absolute; left: var(--kx); top: var(--ky);
+  width: calc(var(--kr) * 2); aspect-ratio: 1;
+  margin: calc(var(--kr) * -1) 0 0 calc(var(--kr) * -1);
+  border-radius: 50%; overflow: hidden; z-index: 2;
+  box-shadow: 0 0 calc(11.88 * var(--hud-scale)) calc(1.944 * var(--hud-scale)) rgba(255, 60, 190, 0.72),
+              0 0 calc(25.92 * var(--hud-scale)) calc(5.4 * var(--hud-scale)) rgba(255, 45, 170, 0.45);
+}
+#hud .v2-iris-disc {
+  position: absolute; inset: 0;
+  background-repeat: no-repeat; background-position: center; background-size: cover;
+  transform: translate(0, 0); transition: transform 150ms ease-out; will-change: transform;
+}
+#hud .v2-reflex {
+  position: absolute; left: var(--kx); top: var(--ky); transform: translate(-50%, -62%);
+  width: calc(var(--kr) * 1.6); aspect-ratio: 1; z-index: 3;
+  background: radial-gradient(ellipse 60% 42% at 50% 42%,
+              rgba(255, 250, 250, 0.5) 0%, rgba(255, 240, 245, 0.16) 45%, transparent 72%);
+  mix-blend-mode: screen; opacity: 0.8; pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  #hud .v2-koenig.orn-pulse .v2-aura { animation: none; opacity: 0.18; }
+  #hud .v2-koenig.orn-pulse .v2-disc { animation: none; opacity: 0.10; }
+  #hud .v2-iris-disc { transition: none; }
+}
+
+/* Korn: EIN gemeinsamer Overlay ueber der ganzen Leiste, nie pro Asset. */
+#hud .hud-grain {
+  position: absolute; left: 0; right: 0; bottom: 0; height: calc(92 * var(--hud-scale));
+  background: var(--grain) repeat; background-size: calc(97.2 * var(--hud-scale)) calc(97.2 * var(--hud-scale));
+  mix-blend-mode: soft-light; opacity: 0.07; pointer-events: none; z-index: 9;
+}
+
+/* ====================================================================
+   Zonemap-Pruefstand (?zonemap=1): Klassenfarben der Vorlage.
+   Grau Panelgrund, Rot Ornament, Gelb Bild, Tuerkis Icon, Hellgrau Text.
+   ==================================================================== */
+body.zonemap { background: #ffffff !important; }
+body.zonemap #game-root { display: none !important; }
+/* Funktions-Icons (Ressourcen/Stats/Effekte) sind reinweisse Glyphen und
+   schlugen im Squint den Koenig-Orb (unabhaengiger Kritiker, Leucht-Exklusivitaet)
+   -> auf warmes Off-White daempfen, nichts ausser dem Koenig erreicht die Spitze. */
+#hud .res-icon, #hud .uc-stat-icon, #hud .uc-eff-icon { filter: brightness(0.8) saturate(0.92); }
+#hud.zonemap .res-icon, #hud.zonemap .uc-stat-icon, #hud.zonemap .uc-eff-icon { filter: none !important; }
+
+#hud.zonemap .panel { background: #7f7f7f !important; }
+#hud.zonemap .panel::before {
+  border-image: none !important; border-color: #ff7f7f !important;
+}
+#hud.zonemap .hud-bar {
+  background: #ff7f7f !important; background-image: none !important;
+  filter: none !important; opacity: 1 !important;
+}
+#hud.zonemap .hud-grain { display: none !important; }
+/* V2-Bluetenebene sitzt in den NICHT-Ornament-Luecken (Slots) -> im Zonemap
+   ganz ausblenden, sonst erzeugen die Bilder Stoer-Zonen. Ornament-Deckung
+   stammt allein aus den Panel-Rahmen (::before) und dem Sockel. */
+#hud.zonemap .orn-layer { display: none !important; }
+/* Der MODERAT-Chrome-Daempfungsfilter darf die Coral-Deckung im Zonemap nicht
+   abdunkeln (sonst faellt die Klassenfarbe unter die Erkennungsschwelle). */
+#hud.zonemap .panel::before { filter: none !important; }
+#hud.zonemap .uc-portrait, #hud.zonemap .uc-mp {
+  background: #bfbf3f !important; box-shadow: none !important; visibility: visible !important;
+}
+#hud.zonemap .uc-portrait-ph { display: none !important; }
+#hud.zonemap .emb-mark, #hud.zonemap .uc-stat-icon, #hud.zonemap .uc-eff-icon, #hud.zonemap .res-icon {
+  background: #3fbfbf !important; background-image: none !important;
+}
+#hud.zonemap .cmd-cell {
+  background: #3fbfbf !important; box-shadow: none !important; filter: none !important;
+}
+#hud.zonemap .cmd-cell .cmd-label { display: none !important; }
+#hud.zonemap .emb-name, #hud.zonemap .emb-claim, #hud.zonemap .menu-text,
+#hud.zonemap .uc-name, #hud.zonemap .uc-sub, #hud.zonemap .uc-stat-val,
+#hud.zonemap .uc-eff-head, #hud.zonemap .uc-eff-line, #hud.zonemap .uc-ml,
+#hud.zonemap .res-val {
+  background: #bfbfbf !important; color: transparent !important;
+}
+#hud.zonemap .menu-text * , #hud.zonemap .res-val * { color: transparent !important; }
+#hud.zonemap .mm-canvas { display: none !important; }

@@ -1,0 +1,55 @@
+node_modules/
+dist/
+*.local
+.DS_Store
+
+__pycache__/
+build/
+
+# KI-Modell-Gewichte (per `tools/werkzeuge_check.py --install` von
+# GitHub-Release / storage.googleapis.com geladen, nicht committet):
+# rembg u2net 176 MB, Real-ESRGAN 67 MB, piper-Stimmen, MediaPipe pose 5,8 MB,
+# fastembed BGE 252 MB.
+tools/models/
+tools/voices/
+tools/bin/
+
+# repo_rag.py-Indizes sind regenerierbar (W12).
+tools/repo_rag.index/
+
+# HUD-V3-Masters sind regenerierbares Build-Ergebnis (tools/build_hud_assets.py
+# aus den getrackten Quellen). Wie dist/: nicht committen, auf Abruf erzeugen.
+public/sprites/ui/hud/v3/
+
+# 3D-Pipeline-Inputs werden committet, damit der Render im Container
+# reproduzierbar laeuft (Fable: "sobald das FBX im Repo liegt, ein Befehl"):
+#   .glb = kanonische KREA-Quelle (Mesh + Material, Textur-Wahrheit)
+#   .fbx = Mixamo-Animations-Clips (Build-Input, nie als Spiel-Asset geshippt)
+# Nur rohe Bild-Dumps vor dem Normalisierungspass bleiben lokal:
+assets/source/**/*.png
+assets/source/**/*.jpg
+assets/source/**/*.jpeg
+
+# Allow tracking for these specific source images (krea raw + zielbilder)
+!assets/source/krea-roh/
+!assets/source/krea-roh/*.png
+!assets/source/zielbilder/
+!assets/source/zielbilder/*.png
+
+# Ausnahme: UI-Paneale sind Verarbeitungs-Input (Triage/Schwaerzen/Nine-Slice)
+# und muessen getrackt sein.
+!assets/source/ui/**/*.png
+!assets/source/ui/**/*.jpg
+!assets/source/ui/**/*.jpeg
+
+# Ausnahme: KREA-Gebaeude/Baum-Rohdaten und Zielbilder muessen getrackt sein
+# (112 Assets + 14 Targets, Normalisierungs-Input).
+!assets/source/krea-roh/**
+!assets/source/zielbilder/**
+
+# Code7: Persistenter u2net-Cache (lädt von github.com/danielgatis/rembg/releases/, 176 MB)
+tools/models/
+
+# Code3-2: AccuRIG-Konverter-Output (H31). User-Ausgabe, kein Quelltext;
+# pro Modell ~31 MB, per Batch schnell 100+ MB. Nicht ins Repo.
+assets/converted_for_accurig/

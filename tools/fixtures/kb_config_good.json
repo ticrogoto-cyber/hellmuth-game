@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "massTiers": {
+    "featherweight": { "mass": 0.5, "kbMult": 2.0, "isStatic": false },
+    "medium": { "mass": 1.0, "kbMult": 1.0, "isStatic": false },
+    "heavy": { "mass": 4.0, "kbMult": 0.35, "isStatic": false },
+    "bulwark": { "mass": 20.0, "kbMult": 0.05, "isStatic": false },
+    "immovable": { "mass": 1000000000.0, "kbMult": 0.0, "isStatic": true }
+  },
+  "tuning": {
+    "force": 350,
+    "decayPerFrame60": 0.88,
+    "maxTravelPx": 128,
+    "decayTravelFactor": 0.4,
+    "staggerMinMs": 150,
+    "staggerMaxMs": 600,
+    "staggerScalePerImpulse": 0.8,
+    "edgeEpsilon": 0.001
+  }
+}

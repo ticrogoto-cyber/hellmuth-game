@@ -1,0 +1,23 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "src/main.ts",
+    "src/main.ts!",
+    "index.html"
+  ],
+  "project": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "ignore": [
+    "src/**/*.d.ts",
+    "tools/**",
+    "test/**",
+    "proof3d/**"
+  ],
+  "ignoreDependencies": [
+    "odiff-bin",
+    "knip",
+    "madge"
+  ]
+}

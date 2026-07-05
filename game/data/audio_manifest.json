@@ -1,0 +1,209 @@
+{
+  "version": 2,
+  "sprachen": ["de", "en", "ko"],
+  "standardSprache": "de",
+  "referenzSprache": "en",
+  "sprites": {
+    "sfx_ui": {
+      "stem": "sfx/ui_sheet",
+      "marks": {
+        "befehl": { "start": 0.0, "dauer": 0.4 },
+        "auswahl": { "start": 0.5, "dauer": 0.35 }
+      }
+    }
+  },
+  "sets": {
+    "sfx.hit.melee": {
+      "key": "sfx.hit.melee",
+      "bus": "sfx",
+      "kategorie": "hit_melee",
+      "cooldownMs": 60,
+      "maxVariants": 4,
+      "files": [{ "stem": "sfx/hit/nah_01" }, { "stem": "sfx/hit/nah_02" }]
+    },
+    "sfx.hit.ranged": {
+      "key": "sfx.hit.ranged",
+      "bus": "sfx",
+      "kategorie": "hit_ranged",
+      "cooldownMs": 60,
+      "maxVariants": 4,
+      "files": [{ "stem": "sfx/hit/fern_01" }, { "stem": "sfx/hit/fern_02" }]
+    },
+    "sfx.death.unit": {
+      "key": "sfx.death.unit",
+      "bus": "sfx",
+      "kategorie": "unit_death",
+      "cooldownMs": 90,
+      "files": [{ "stem": "sfx/death/einheit_01" }]
+    },
+    "sfx.death.building": {
+      "key": "sfx.death.building",
+      "bus": "sfx",
+      "kategorie": "building_death",
+      "cooldownMs": 0,
+      "gain": 0.9,
+      "files": [{ "stem": "sfx/death/gebaeude_01" }]
+    },
+    "impact.big": {
+      "key": "impact.big",
+      "bus": "sfx",
+      "kategorie": "building_death",
+      "cooldownMs": 0,
+      "gain": 1.0,
+      "files": [
+        { "stem": "sfx/impact/big_01" },
+        { "stem": "sfx/impact/big_02" }
+      ]
+    },
+    "impact.small": {
+      "key": "impact.small",
+      "bus": "sfx",
+      "kategorie": "hit_melee",
+      "cooldownMs": 50,
+      "maxVariants": 4,
+      "files": [
+        { "stem": "sfx/impact/small_01" },
+        { "stem": "sfx/impact/small_02" }
+      ]
+    },
+    "sfx.ui.command": {
+      "key": "sfx.ui.command",
+      "bus": "sfx",
+      "kategorie": "ui",
+      "cooldownMs": 40,
+      "files": [{ "sprite": "sfx_ui", "marker": "befehl" }]
+    },
+    "sfx.ui.select": {
+      "key": "sfx.ui.select",
+      "bus": "sfx",
+      "kategorie": "ui",
+      "cooldownMs": 40,
+      "files": [{ "sprite": "sfx_ui", "marker": "auswahl" }]
+    },
+
+    "bark.hellmuth.select": {
+      "key": "bark.hellmuth.select",
+      "bus": "stimme",
+      "kategorie": "ui",
+      "files": [
+        { "stem": "voice/de/bark_hellmut_select_01", "lang": "de" },
+        { "stem": "voice/de/bark_hellmut_select_02", "lang": "de" },
+        { "stem": "voice/en/bark_hellmut_select_01", "lang": "en" },
+        { "stem": "voice/ko/bark_hellmut_select_01", "lang": "ko" }
+      ]
+    },
+    "bark.hellmuth.annoyed": {
+      "key": "bark.hellmuth.annoyed",
+      "bus": "stimme",
+      "kategorie": "ui",
+      "files": [
+        { "stem": "voice/de/bark_hellmut_annoyed_01", "lang": "de" },
+        { "stem": "voice/en/bark_hellmut_annoyed_01", "lang": "en" }
+      ]
+    },
+    "bark.hellmuth.move": {
+      "key": "bark.hellmuth.move",
+      "bus": "stimme",
+      "kategorie": "ui",
+      "files": [
+        { "stem": "voice/de/bark_hellmut_move_01", "lang": "de" },
+        { "stem": "voice/de/bark_hellmut_move_02", "lang": "de" },
+        { "stem": "voice/en/bark_hellmut_move_01", "lang": "en" }
+      ]
+    },
+    "bark.hellmuth.attack": {
+      "key": "bark.hellmuth.attack",
+      "bus": "stimme",
+      "kategorie": "ui",
+      "files": [{ "stem": "voice/de/bark_hellmut_attack_01", "lang": "de" }]
+    },
+    "bark.hellmuth.death": {
+      "key": "bark.hellmuth.death",
+      "bus": "stimme",
+      "kategorie": "ui",
+      "files": [{ "stem": "voice/de/bark_hellmut_death_01", "lang": "de" }]
+    },
+    "bark.hellmuth.idle": {
+      "key": "bark.hellmuth.idle",
+      "bus": "stimme",
+      "kategorie": "ui",
+      "files": [{ "stem": "voice/de/bark_hellmut_idle_01", "lang": "de" }]
+    },
+
+    "destille.drip": {
+      "key": "destille.drip",
+      "bus": "sfx",
+      "kategorie": "building_idle",
+      "cooldownMs": 0,
+      "gain": 0.6,
+      "optional": true,
+      "jitterPitchCents": 100,
+      "jitterDb": 1.0,
+      "files": [
+        { "stem": "sfx/destille/drip_01" },
+        { "stem": "sfx/destille/drip_02" },
+        { "stem": "sfx/destille/drip_03" }
+      ]
+    },
+    "parasit.drain": {
+      "key": "parasit.drain",
+      "bus": "sfx",
+      "kategorie": "combat_fx",
+      "cooldownMs": 50,
+      "gain": 0.85,
+      "optional": true,
+      "jitterPitchCents": 200,
+      "jitterDb": 1.5,
+      "files": [
+        { "stem": "sfx/parasit/drain_01" },
+        { "stem": "sfx/parasit/drain_02" },
+        { "stem": "sfx/parasit/drain_03" }
+      ]
+    },
+
+    "music.explore": {
+      "key": "music.explore", "bus": "musik", "kategorie": "music", "loop": true,
+      "files": [{ "stem": "music/explore", "formats": ["ogg", "m4a", "mp3"] }]
+    },
+    "music.tension": {
+      "key": "music.tension", "bus": "musik", "kategorie": "music", "loop": true,
+      "files": [{ "stem": "music/tension", "formats": ["ogg", "m4a", "mp3"] }]
+    },
+    "music.combat": {
+      "key": "music.combat", "bus": "musik", "kategorie": "music", "loop": true,
+      "files": [{ "stem": "music/combat", "formats": ["ogg", "m4a", "mp3"] }]
+    },
+    "music.victory": {
+      "key": "music.victory", "bus": "musik", "kategorie": "music", "loop": false,
+      "files": [{ "stem": "music/victory", "formats": ["ogg", "m4a", "mp3"] }]
+    },
+    "music.defeat": {
+      "key": "music.defeat", "bus": "musik", "kategorie": "music", "loop": false,
+      "files": [{ "stem": "music/defeat", "formats": ["ogg", "m4a", "mp3"] }]
+    },
+
+    "ambient.erde_tot": {
+      "key": "ambient.erde_tot", "bus": "ambience", "kategorie": "ambient", "loop": true,
+      "files": [{ "stem": "ambience/erde_tot" }]
+    },
+    "ambient.sandlehm": {
+      "key": "ambient.sandlehm", "bus": "ambience", "kategorie": "ambient", "loop": true,
+      "files": [{ "stem": "ambience/sandlehm" }]
+    },
+    "ambient.steppe": {
+      "key": "ambient.steppe", "bus": "ambience", "kategorie": "ambient", "loop": true,
+      "files": [{ "stem": "ambience/steppe" }]
+    }
+  },
+  "bindings": [
+    { "event": "fx.unit_hit", "pick": "first", "sets": { "*": "sfx.hit.melee" } },
+    { "event": "fx.unit_died", "pick": "first", "sets": { "*": "sfx.death.unit" } },
+    { "event": "ui:build-request", "pick": "first", "sets": { "*": "sfx.ui.command" } },
+    { "event": "ui:produce-request", "pick": "first", "sets": { "*": "sfx.ui.command" } },
+    { "event": "sel.units_selected", "pick": "first", "sets": { "*": "sfx.ui.select" } },
+    { "event": "sel.command_move", "pick": "first", "sets": { "*": "sfx.ui.command" } },
+    { "event": "prod.unit_ready", "pick": "first", "sets": { "*": "sfx.ui.command" } },
+    { "event": "fx.destillat_produced", "pick": "first", "sets": { "*": "destille.drip" } },
+    { "event": "fx.destillat_dropped", "pick": "first", "sets": { "*": "parasit.drain" } }
+  ]
+}

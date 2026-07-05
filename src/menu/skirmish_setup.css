@@ -1,0 +1,207 @@
+/* Skirmish-Setup. 3-Spalten Master-Detail (Subagent #2/#10, AoE4-Modell):
+ * links Map-Vorschau-Hero, Mitte Kartenliste, rechts Konfiguration. */
+.skirmish {
+  display: grid;
+  grid-template-columns: 1.4fr 0.9fr 1fr;
+  gap: var(--space-l);
+  align-items: start;
+}
+
+/* Spalte links: grosser Map-Hero (16:10 Vorschau im Aspect 7:5) */
+.skirmish-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+.skirmish-hero-image {
+  width: 100%;
+  aspect-ratio: 168.956 / 120.866;
+  background: var(--bg-secondary);
+  border: 1px solid var(--divider);
+  overflow: hidden;
+}
+.skirmish-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.skirmish-hero-meta {
+  display: flex;
+  gap: var(--space-s);
+  font-family: "Printvetica", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.skirmish-hero-meta strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-right: var(--space-2xs);
+}
+.skirmish-hero-name {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+.skirmish-hero-desc {
+  font-family: "Fournier Pro", serif;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  max-width: 56ch;
+}
+
+/* Spalte Mitte: Karten-Liste mit Mini-Cards */
+.skirmish-maps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.skirmish-map {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: var(--space-s);
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--divider);
+  padding: var(--space-xs);
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-primary);
+}
+.skirmish-map:hover {
+  border-color: var(--text-secondary);
+}
+.skirmish-map.is-active {
+  border-color: var(--accent);
+  background: var(--bg-secondary);
+}
+.skirmish-map-thumb {
+  width: 100%;
+  aspect-ratio: 168.956 / 120.866;
+  background: var(--bg-tertiary);
+  overflow: hidden;
+  display: block;
+}
+.skirmish-map-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.skirmish-map-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+.skirmish-map-name {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.skirmish-map-mini {
+  font-family: "Printvetica", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Spalte rechts: Konfiguration */
+.skirmish-config {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+}
+.skirmish-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+.skirmish-label {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Fraktions-Sigil gross + zentral (Subagent #2). */
+.skirmish-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-m);
+  border: 1px solid var(--divider);
+  background: var(--bg-secondary);
+}
+.skirmish-banner-sigil {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.skirmish-banner-sigil svg {
+  width: 100%;
+  height: 100%;
+  color: var(--accent);
+}
+.skirmish-banner-name {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.skirmish-vs {
+  font-family: "Fournier Pro", serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Segmentierte Buttons (Fraktion, Schwierigkeit) */
+.skirmish-choice {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--divider);
+  width: fit-content;
+}
+.skirmish-choice button {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 0;
+  border-right: 1px solid var(--divider);
+  color: var(--text-secondary);
+  padding: var(--space-xs) var(--space-s);
+  cursor: pointer;
+}
+.skirmish-choice button:last-child {
+  border-right: 0;
+}
+.skirmish-choice button.is-active {
+  background: var(--bg-secondary);
+  color: var(--accent);
+}
+
+.skirmish-flavor {
+  font-family: "Fournier Pro", serif;
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}

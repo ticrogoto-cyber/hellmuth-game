@@ -1,0 +1,220 @@
+{
+  "hellmuth": {
+    "name": "Hellmuth",
+    "faction": "hellmuth",
+    "role": "heavy",
+    "hp": 200,
+    "kosten": {},
+    "pop": 0,
+    "bauzeit": 0,
+    "tempo": 2.6,
+    "schaden": 25,
+    "reichweite": 1,
+    "angriffstempo": 0.8,
+    "ruestung": 4,
+    "angriffstyp": "nah",
+    "_platzhalter": true,
+    "_hinweis": "PLATZHALTER-WERTE. Finale Held-Balance legt Ticro fest, sobald der Walk sichtbar ist. Atlas aktuell 8 Richtungen; 16 folgen mit dem 36,87-Grad-Re-Render."
+  },
+  "sammler": {
+    "name": "Sammler",
+    "faction": "hellmuth",
+    "role": "worker",
+    "hp": 40,
+    "kosten": {
+      "botanicals": 50
+    },
+    "pop": 1,
+    "bauzeit": 12,
+    "kann_bauen": true,
+    "tempo": 2.8,
+    "tragkraft": 10,
+    "erntezeit_ms": 1200,
+    "schaden": 0,
+    "reichweite": 1,
+    "angriffstempo": 1.0,
+    "ruestung": 0,
+    "angriffstyp": "nah"
+  },
+  "kurator": {
+    "name": "Kuratorin",
+    "faction": "hellmuth",
+    "role": "caster",
+    "hp": 40,
+    "kosten": {
+      "destillat": 120
+    },
+    "pop": 1,
+    "bauzeit": 30,
+    "tempo": 2.6,
+    "schaden": 4,
+    "reichweite": 3,
+    "angriffstempo": 0.6,
+    "ruestung": 0,
+    "angriffstyp": "fern"
+  },
+  "apotheker": {
+    "name": "Apothekerin",
+    "faction": "hellmuth",
+    "role": "melee",
+    "hp": 70,
+    "kosten": {
+      "botanicals": 70,
+      "reinwasser": 20
+    },
+    "pop": 1,
+    "bauzeit": 18,
+    "tempo": 3.0,
+    "schaden": 8,
+    "reichweite": 1,
+    "angriffstempo": 1.0,
+    "ruestung": 1,
+    "angriffstyp": "nah"
+  },
+  "destillateur": {
+    "name": "Destillateur",
+    "faction": "hellmuth",
+    "role": "ranged",
+    "hp": 55,
+    "kosten": {
+      "botanicals": 60,
+      "reinwasser": 40
+    },
+    "pop": 1,
+    "bauzeit": 20,
+    "tempo": 2.7,
+    "schaden": 6,
+    "reichweite": 4,
+    "angriffstempo": 0.8,
+    "ruestung": 0,
+    "angriffstyp": "fern",
+    "requiresBuilding": "labor"
+  },
+  "suchfalter": {
+    "name": "Suchfalter",
+    "faction": "hellmuth",
+    "role": "flyer",
+    "hp": 50,
+    "kosten": {
+      "reinwasser": 80,
+      "destillat": 40
+    },
+    "pop": 1,
+    "bauzeit": 22,
+    "tempo": 3.6,
+    "schaden": 5,
+    "reichweite": 2,
+    "angriffstempo": 1.2,
+    "ruestung": 0,
+    "angriffstyp": "fern"
+  },
+  "alchemist": {
+    "name": "Alchemist",
+    "faction": "hellmuth",
+    "role": "heavy",
+    "hp": 120,
+    "kosten": {
+      "reinwasser": 100,
+      "destillat": 80
+    },
+    "pop": 2,
+    "bauzeit": 34,
+    "tempo": 2.2,
+    "schaden": 16,
+    "reichweite": 1,
+    "angriffstempo": 0.6,
+    "ruestung": 3,
+    "angriffstyp": "nah"
+  },
+  "sirup_trupp": {
+    "name": "Sirup-Trupp",
+    "faction": "moderat",
+    "role": "worker",
+    "hp": 35,
+    "kosten": {
+      "botanicals": 50
+    },
+    "pop": 1,
+    "bauzeit": 12,
+    "kann_bauen": true,
+    "tempo": 2.8,
+    "tragkraft": 10,
+    "erntezeit_ms": 1200,
+    "schaden": 0,
+    "reichweite": 1,
+    "angriffstempo": 1.0,
+    "ruestung": 0,
+    "angriffstyp": "nah"
+  },
+  "stahlbrute": {
+    "name": "Stahlbrute",
+    "faction": "moderat",
+    "role": "heavy",
+    "hp": 110,
+    "kosten": {
+      "botanicals": 120,
+      "destillat": 60
+    },
+    "pop": 2,
+    "bauzeit": 30,
+    "tempo": 2.2,
+    "schaden": 14,
+    "reichweite": 1,
+    "angriffstempo": 0.7,
+    "ruestung": 3,
+    "angriffstyp": "nah"
+  },
+  "schleuderer": {
+    "name": "Schleuderer",
+    "faction": "moderat",
+    "role": "ranged",
+    "hp": 50,
+    "kosten": {
+      "botanicals": 60,
+      "reinwasser": 30
+    },
+    "pop": 1,
+    "bauzeit": 18,
+    "tempo": 2.7,
+    "schaden": 6,
+    "reichweite": 4,
+    "angriffstempo": 0.8,
+    "ruestung": 0,
+    "angriffstyp": "fern"
+  },
+  "rohrkanone": {
+    "name": "Rohrkanone",
+    "faction": "moderat",
+    "role": "siege",
+    "hp": 90,
+    "kosten": {
+      "botanicals": 100,
+      "destillat": 70
+    },
+    "pop": 3,
+    "bauzeit": 32,
+    "tempo": 1.8,
+    "schaden": 20,
+    "reichweite": 5,
+    "angriffstempo": 0.3,
+    "ruestung": 1,
+    "angriffstyp": "fern"
+  },
+  "toxischer_nebler": {
+    "name": "Toxischer Nebler",
+    "faction": "moderat",
+    "role": "caster",
+    "hp": 45,
+    "kosten": {
+      "destillat": 110
+    },
+    "pop": 1,
+    "bauzeit": 28,
+    "tempo": 2.6,
+    "schaden": 5,
+    "reichweite": 3,
+    "angriffstempo": 0.6,
+    "ruestung": 0,
+    "angriffstyp": "fern"
+  }
+}

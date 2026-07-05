@@ -1,0 +1,24 @@
+# 3D-Cluster — numpy 1.26.x (bpy-Zwang). Kollidiert mit Bild-Cluster.
+# Eigenes venv:  python3 -m venv .venv-3d && source .venv-3d/bin/activate
+#                pip install -r requirements-3d.txt
+# Hinweis: Open3D + pyvista brauchen libGL via apt.
+
+# Welle 1 (CONTAINER-WERKZEUGE.md)
+trimesh
+pygltflib
+dracox                    # Draco-Komprimierungs-Handler fuer trimesh
+bpy                       # zwingt numpy 1.26 — eigenes venv pflicht
+# FBX2glTF kommt als GitHub-Release-Binary, nicht pip.
+
+# Welle 2 (CONTAINER-WERKZEUGE-2.md B) — Mesh & Rigging
+open3d                    # direkter FBX-Read, ICP-Alignment, Poisson
+meshoptimizer             # 3x schnellere Dezimierung als trimesh
+pymeshlab                 # 100+ Filter, MeshLab headless
+xatlas                    # UV-Unwrap in 0,2 s
+embreex                   # AO-Bake 80k Rays in 0,8 s
+pyvista                   # headless screenshot/messen (libGL apt noetig)
+ikpy                      # IK-Brücke 3-Ziel, Fehler 0,0
+pybullet                  # URDF-Sim, Fehler 0,0027 m
+mediapipe                 # Pose-zu-IK, PNG->33-Landmarks->IK Fehler 0,0000 m (Klasse 1, im ci-fast installiert)
+perlin-noise              # prozedurale Idle-Animation via bpy-Keyframes
+bvh                       # BVH-Roundtrip

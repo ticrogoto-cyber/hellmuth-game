@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://hellmuth/florilegium/schema.json",
+  "title": "Florilegium-Eintrag",
+  "description": "Verbindlicher Vertrag zwischen Backend (Code9) und UI (Code2). Pro Eintrag eine Datei unter data/florilegium/<lang>/<category>/<slug>.json. Schema ist Draft-07.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "category",
+    "title",
+    "order",
+    "unlock",
+    "image",
+    "audio",
+    "text",
+    "citation",
+    "tags"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{1,63}$",
+      "description": "lowercase_snake_case, eindeutig innerhalb der Kategorie (Validator H22). Dient auch als slug fuer Pfade."
+    },
+    "category": {
+      "type": "string",
+      "enum": ["fraktionen", "einheiten", "gebaeude", "substanzen", "konzepte", "welt"],
+      "description": "Eine der sechs festen Kategorien. Bestimmt den Unterordner."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "description": "Lesbarer Titel im Folianten (z. B. 'Die Apothekerin')."
+    },
+    "order": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Sortier-Index innerhalb der Kategorie. Aufsteigend, Luecken erlaubt."
+    },
+    "unlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "trigger"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["always", "build", "kill", "research"],
+          "description": "always = von Anfang an sichtbar; build/kill/research = im Spielverlauf freigeschaltet."
+        },
+        "trigger": {
+          "type": ["string", "null"],
+          "description": "Bei type=always darf null sein; sonst ID des ausloesenden Ereignisses (z. B. Gebaeude-/Einheiten-/Tech-Schluessel)."
+        }
+      }
+    },
+    "image": {
+      "type": "string",
+      "pattern": "^florilegium/[a-z]+/[a-z0-9_]+\\.png$",
+      "description": "Pfad relativ zu hellmuth/assets/voice/.. (siehe Backend-Doku). Konvention: 'florilegium/<category>/<slug>.png'."
+    },
+    "audio": {
+      "type": "string",
+      "pattern": "^florilegium/[a-z]+/[a-z0-9_]+\\.ogg$",
+      "description": "Pfad relativ zu hellmuth/assets/voice/<lang>/. Konvention: 'florilegium/<category>/<slug>.ogg'. Vorgerendert, nicht zur Laufzeit erzeugt."
+    },
+    "text": {
+      "type": "string",
+      "minLength": 200,
+      "maxLength": 2000,
+      "description": "Foliante-Text. Eleven-Labs-Quelle fuer das Audio. Validator H22 erzwingt 200..2000 Zeichen."
+    },
+    "citation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "page"],
+      "properties": {
+        "source": {
+          "type": ["string", "null"],
+          "enum": ["Kreativer Suizid", "Helmuths Buch", null],
+          "description": "Buchquelle oder null, wenn der Eintrag keine Buch-Referenz traegt."
+        },
+        "page": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "description": "Seitennummer in der Quelle, oder null."
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,31}$"
+      },
+      "uniqueItems": true,
+      "maxItems": 16,
+      "description": "Lowercase-Snake-Tags fuer Filter/Querverweise im UI."
+    }
+  }
+}

@@ -1,0 +1,31 @@
+# Bild-Cluster — numpy >= 2 (kollidiert mit bpy/3D-Cluster).
+# Welle 1: rembg + opencv + onnxruntime; Welle 2: psd-tools, opensimplex, ...
+# Eigenes venv:  python3 -m venv .venv-bild && source .venv-bild/bin/activate
+#                pip install -r requirements-bild.txt
+#
+# Reproduktion der Welle-1- und Welle-2-Mess-Pinningen:
+
+# Welle 1 (CONTAINER-WERKZEUGE.md, Commit 69d93a2)
+rembg
+onnxruntime
+opencv-python-headless
+pyvips
+rectpack --use-pep517
+Pillow
+numpy>=2,<3
+
+# Welle 2 (CONTAINER-WERKZEUGE-2.md, Commit 4788603) - Bild-Sektion A
+psd-tools                 # PSD-Roundtrip
+opensimplex               # prozedurale Textur (Boden-Erde/Hellmuth-Varianten)
+numpngw                   # APNG (Sigil-Pulse, 8-Frame)
+colorspacious             # DeltaE-Audit fuer Palette-Reduktion
+pymatting                 # Halo-Cleanup NACH rembg (W7)
+# Real-ESRGAN-Bypass:  torch (1,2 GB CPU) + RRDBNet (manuell aus Welle-1-H8)
+torch                     # Real-ESRGAN-Bypass + Style-Transfer
+
+# CI-Klasse 1 (Fix A1, Code6-CI-Werkzeug-Manifest): reine pip-Pakete, die im
+# ci-fast-Runner bereitgestellt werden. Vorher fehlte der pip-install-Schritt in
+# .github/workflows/ci.yml -> werkzeuge_check.py --ci meldete 19x ModuleNotFound.
+rectpack                  # H6b Atlas-Packing (--use-pep517 nicht mehr noetig)
+pandas                    # H7 Daten/Balance
+matplotlib                # H7 Daten/Balance

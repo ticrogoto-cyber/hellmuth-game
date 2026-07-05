@@ -1,0 +1,46 @@
+/* HUD-Tönung (Paket A, Teil 2) — luminanzerhaltende Fraktionsfärbung über
+   achromatischen Graustufen-Mastern. KEINE Farbe ist je ins Asset gebacken;
+   die Haut wechselt per CSS-Variable, das Relief bleibt der Master.
+
+   Modell: W3C `mix-blend-mode: color` = SetLum(Cs, Lum(Cb)) — der Master (Cb)
+   liefert Luma/Relief, die flache Fraktionsfarbe (Cs) liefert Hue/Chroma. Mit
+   `isolation: isolate` bleibt der Blend lokal (greift nie in die Spielwelt).
+
+   Platzhalter-Tönung: Ticro setzt die kanonischen Werte beim Asset-Durchlauf
+   (HELLMUTH Gold-Grün, MODERAT Magenta). Hier nur sichtbare Stellvertreter,
+   gespiegelt aus FACTION_TINT_PLACEHOLDER in src/data/hud_assets.ts. */
+
+#hud.faction-hellmuth { --hud-tint: #b9a14a; } /* PLATZHALTER mattgold-grün */
+#hud.faction-moderat  { --hud-tint: #c0407a; } /* PLATZHALTER magenta-stahl */
+
+/* Getöntes Chrome aus EINEM Master: Master als Grund (Luma), flache Tint-Lage
+   per ::after im color-Blend, auf die Master-Silhouette maskiert. `--hud-master`
+   und die Kachelung (background-repeat/-size) setzt der Aufrufer (Paket B).
+   Beispiel: <div class="hud-tinted" style="--hud-master:url(/sprites/.../strip_h_e.png);
+   background-repeat:repeat-x;background-size:auto 100%"></div> */
+.hud-tinted {
+  position: relative;
+  isolation: isolate;                 /* Blend bleibt im eigenen Kontext */
+  background-image: var(--hud-master); /* Graustufen-Master = Luma/Relief (Cb) */
+}
+.hud-tinted::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--hud-tint);        /* flache Fraktionsfarbe (Cs) */
+  mix-blend-mode: color;             /* SetLum(Cs, Lum(Cb)) */
+  /* auf die Master-Silhouette + Kachelung maskieren (erbt die BG-Geometrie) */
+  -webkit-mask-image: var(--hud-master);
+  mask-image: var(--hud-master);
+  -webkit-mask-repeat: inherit;
+  mask-repeat: inherit;
+  -webkit-mask-size: inherit;
+  mask-size: inherit;
+  -webkit-mask-position: inherit;
+  mask-position: inherit;
+  pointer-events: none;
+}
+
+/* Reduzierte Transparenz/Modi sind hier unnötig: der Blend ist statisch. Wer ein
+   getöntes Element ohne Maske braucht (volle Rechteckfläche), nutzt .hud-tinted
+   und setzt --hud-master auf einen vollflächigen Backdrop-Master. */

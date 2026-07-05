@@ -1,0 +1,464 @@
+/* Florilegium-UI. Dunkles Codex-Layout (CODE2-DESIGN-SPEC).
+ * Tokens + Schrift aus design_system.css.
+ * Subagent-Empfehlungen umgesetzt:
+ *  - Tabs gestrichen, Kategorien-Akkordeon mit Zaehler (#5)
+ *  - Header auf 48px, Wortmarke + Mini-Player + Prev/Next + Schliessen (#4, #6)
+ *  - Bild oben Vollbreite, Body in 65ch-Spalte (#7)
+ *  - Audio sticky-bottom mit Backdrop-Blur (#7, #11)
+ *  - Tags klickbar als Filter (#7)
+ */
+
+#florilegium {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: none;
+  font-family: "Printvetica", system-ui, sans-serif;
+  color: var(--text-primary);
+  background: rgba(12, 12, 12, 0.94);
+}
+#florilegium.is-open {
+  display: block;
+}
+
+#florilegium[data-mode="fullview"] .flo-frame { inset: var(--space-l); }
+#florilegium[data-mode="overlay"] .flo-frame { inset: var(--space-m) var(--space-m) var(--space-m) 30%; }
+#florilegium[data-mode="overlay"] .flo-scrim {
+  position: absolute;
+  inset: 0 70% 0 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+  cursor: pointer;
+}
+
+.flo-frame {
+  position: absolute;
+  background: var(--bg-primary);
+  border: 1px solid var(--divider);
+  box-shadow: var(--shadow-modal);
+  display: grid;
+  grid-template-rows: 48px 1fr;
+  grid-template-columns: minmax(240px, 24%) 1fr;
+  grid-template-areas:
+    "header header"
+    "list   detail";
+  overflow: hidden;
+}
+
+/* Header (48px schlank) ----------------------------------------------------- */
+.flo-header {
+  grid-area: header;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: var(--space-s);
+  padding: 0 var(--space-m);
+  border-bottom: 1px solid var(--divider);
+  background: var(--bg-primary);
+}
+.flo-mark {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.flo-breadcrumb {
+  font-family: "Printvetica", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-align: center;
+}
+.flo-breadcrumb .sep {
+  color: var(--divider);
+  margin: 0 var(--space-xs);
+}
+.flo-breadcrumb .crumb-entry {
+  color: var(--text-primary);
+}
+
+/* Mini-Player im Header (Subagent #11) */
+.flo-mini-player {
+  display: none;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0 var(--space-s);
+  border-left: 1px solid var(--divider);
+  border-right: 1px solid var(--divider);
+  height: 48px;
+}
+.flo-mini-player.is-active {
+  display: flex;
+}
+.flo-mini-player-toggle {
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: "Printvetica", sans-serif;
+  font-size: 12px;
+}
+.flo-mini-player-title {
+  font-family: "Fournier Pro", serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--text-secondary);
+  max-width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Nav-Pfeile + Schliessen */
+.flo-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+.flo-nav button {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: 1px solid var(--divider);
+  color: var(--text-secondary);
+  font-family: "Printvetica", sans-serif;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+}
+.flo-nav button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.flo-nav button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.flo-close {
+  background: transparent;
+  border: 1px solid var(--divider);
+  color: var(--text-secondary);
+  font-family: "Printvetica", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: var(--space-2xs) var(--space-s);
+  cursor: pointer;
+  height: 30px;
+}
+.flo-close:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Liste links: Akkordeon mit Zaehlern (Subagent #5) ------------------------- */
+.flo-list {
+  grid-area: list;
+  border-right: 1px solid var(--divider);
+  background: var(--bg-primary);
+  overflow-y: auto;
+  padding: var(--space-s) 0 var(--space-m) 0;
+}
+.flo-search {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--divider);
+  padding: var(--space-xs) var(--space-m);
+}
+.flo-search input {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--divider);
+  color: var(--text-primary);
+  font-family: "Fournier Pro", serif;
+  font-size: 13px;
+  padding: var(--space-2xs) var(--space-xs);
+  box-sizing: border-box;
+}
+.flo-search input::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+.flo-cat {
+  border-bottom: 1px solid var(--divider);
+}
+.flo-cat-head {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-s) var(--space-m);
+  font-family: "Printvetica", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+}
+.flo-cat-head:hover {
+  color: var(--text-primary);
+}
+.flo-cat-chevron {
+  display: inline-block;
+  width: 12px;
+  font-size: 13px;
+  transition: transform 0.12s ease;
+}
+.flo-cat[aria-expanded="false"] .flo-cat-chevron {
+  transform: rotate(-90deg);
+}
+.flo-cat-count {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+.flo-cat-items {
+  display: flex;
+  flex-direction: column;
+}
+.flo-cat[aria-expanded="false"] .flo-cat-items {
+  display: none;
+}
+.flo-item {
+  display: grid;
+  grid-template-columns: 8px 1fr;
+  gap: var(--space-xs);
+  align-items: baseline;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-left: 2px solid transparent;
+  font-family: "Printvetica", sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  padding: var(--space-xs) var(--space-m) var(--space-xs) calc(var(--space-m) + 4px);
+  cursor: pointer;
+}
+.flo-item:hover {
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+.flo-item.is-active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--bg-secondary);
+}
+.flo-item-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: transparent;
+}
+.flo-item.is-unread .flo-item-dot {
+  background: var(--accent);
+}
+.flo-empty {
+  padding: var(--space-l) var(--space-m);
+  color: var(--text-muted);
+  font-family: "Fournier Pro", serif;
+  font-style: italic;
+}
+
+/* Detail rechts (Bild oben Vollbreite, Subagent #7) ------------------------ */
+.flo-detail {
+  grid-area: detail;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  position: relative;
+}
+.flo-detail-image {
+  width: 100%;
+  aspect-ratio: var(--florilegium-image-ratio);
+  max-height: 320px;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--divider);
+  overflow: hidden;
+  flex: none;
+}
+.flo-detail-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+.flo-detail-image[data-missing="1"] img { display: none; }
+.flo-detail-image[data-missing="1"] {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--bg-secondary) 0 12px,
+    var(--bg-tertiary) 12px 24px
+  );
+}
+
+.flo-detail-body {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-xl) calc(var(--space-3xl) + var(--space-s)) var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+.flo-detail-meta {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.flo-detail-title {
+  font-family: "Printvetica", sans-serif;
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.05;
+}
+.flo-detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+.flo-tag {
+  font-family: "Printvetica", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: var(--space-2xs) var(--space-xs);
+  background: var(--bg-secondary);
+  border: 1px solid var(--divider);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease;
+}
+.flo-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.flo-tag.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(232, 179, 58, 0.08);
+}
+.flo-detail-text {
+  font-family: "Fournier Pro", serif;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  margin: 0;
+}
+.flo-detail-rule {
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+  border: 0;
+  margin: var(--space-s) 0 0 0;
+}
+.flo-detail-citation {
+  font-family: "Fournier Pro", serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-s);
+}
+.flo-detail-citation a {
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--divider);
+}
+.flo-detail-citation a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Sticky-Audio-Bar unten ---------------------------------------------------- */
+.flo-audio {
+  position: sticky;
+  bottom: 0;
+  background: rgba(12, 12, 12, 0.92);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid var(--divider);
+  padding: var(--space-s) var(--space-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  margin-top: auto;
+}
+.flo-audio-btn {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: var(--space-xs) var(--space-s);
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
+  cursor: pointer;
+  min-width: 150px;
+  text-align: center;
+}
+.flo-audio-btn:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
+  border-color: var(--accent);
+}
+.flo-audio-progress {
+  flex: 1;
+  height: 2px;
+  background: var(--divider);
+  position: relative;
+  cursor: pointer;
+}
+.flo-audio-progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  background: var(--accent);
+}
+.flo-audio-time {
+  font-family: "Fournier Pro", serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--text-muted);
+  min-width: 56px;
+  text-align: right;
+}
+.flo-audio-status {
+  font-family: "Fournier Pro", serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Overlay-Modus reduziert die Vollbreite-Polsterung */
+#florilegium[data-mode="overlay"] .flo-detail-body { padding: var(--space-l); }
+#florilegium[data-mode="overlay"] .flo-detail-image { max-height: 200px; }

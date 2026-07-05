@@ -1,0 +1,164 @@
+/* Editor-Werkzeugleiste. EIGENES CSS -- importiert NICHT hud.css (getrennte
+   Dateien, kein Merge-Konflikt mit der HUD-Instanz). Farbtokens bewusst dupliziert:
+   Gold (Hellmuth) #ffd25a, Magenta (Moderat) #ff3da5, mattes Panel-Schwarz. */
+
+#editor-ui {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 232px;
+  max-height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 10px 10px 16px;
+  background: linear-gradient(180deg, #16181c 0%, #0e0f12 100%);
+  border-right: 1px solid #2c2f36;
+  box-shadow: 2px 0 14px rgba(0, 0, 0, 0.5);
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  color: #cdd2d8;
+  z-index: 50;
+  user-select: none;
+}
+
+#editor-ui .ed-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2c2f36;
+  margin-bottom: 10px;
+}
+#editor-ui .ed-title {
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: #ffd25a;
+}
+#editor-ui .ed-sub {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: #7d8590;
+}
+
+#editor-ui .ed-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+#editor-ui .ed-tool {
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: 1px;
+  padding: 7px 4px;
+  background: #1d2026;
+  color: #b7bdc5;
+  border: 1px solid #2c2f36;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+#editor-ui .ed-tool:hover {
+  background: #262a31;
+  color: #e6eaee;
+}
+#editor-ui .ed-tool.active {
+  background: #2a2410;
+  color: #ffd25a;
+  border-color: #ffd25a;
+}
+
+#editor-ui .ed-options {
+  min-height: 28px;
+  margin-bottom: 8px;
+}
+#editor-ui .ed-grouplabel {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #7d8590;
+  margin: 6px 0 3px;
+}
+#editor-ui .ed-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+#editor-ui .ed-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 5px 8px;
+  background: #1d2026;
+  color: #b7bdc5;
+  border: 1px solid #2c2f36;
+  border-radius: 3px;
+  cursor: pointer;
+}
+#editor-ui .ed-chip:hover {
+  background: #262a31;
+}
+#editor-ui .ed-chip.active {
+  border-color: #ffd25a;
+  color: #ffe9b0;
+  background: #241f10;
+}
+#editor-ui .ed-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+#editor-ui .ed-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0;
+  padding: 8px 0;
+  border-top: 1px solid #2c2f36;
+  border-bottom: 1px solid #2c2f36;
+}
+#editor-ui .ed-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #aeb4bc;
+}
+#editor-ui .ed-slider input[type="range"] {
+  width: 100%;
+  accent-color: #ffd25a;
+}
+
+#editor-ui .ed-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-top: 10px;
+}
+#editor-ui .ed-action {
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: 1px;
+  padding: 8px 4px;
+  background: #1d2026;
+  color: #cdd2d8;
+  border: 1px solid #3a3030;
+  border-radius: 3px;
+  cursor: pointer;
+}
+#editor-ui .ed-action:hover {
+  background: #2a1c22;
+  color: #ff8fcb;
+  border-color: #ff3da5;
+}
+#editor-ui .ed-note {
+  font-size: 13px;
+  line-height: 1.35;
+  color: #8b929b;
+  padding: 4px 0;
+}

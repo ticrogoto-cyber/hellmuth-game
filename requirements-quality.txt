@@ -1,0 +1,19 @@
+# Quality-Cluster — Test, Lint, Code-Hygiene. Bild-Cluster-venv-kompatibel.
+# Eigenes venv:  python3 -m venv .venv-quality
+#                pip install -r requirements-quality.txt
+#
+# Die meisten Werkzeuge dieser Datei sind npm-/Node-Werkzeuge — siehe
+# package.json devDependencies (knip, madge, ts-morph, biome, eslint,
+# pixelmatch, looks-same).
+
+# Welle 2 (CONTAINER-WERKZEUGE-2.md E + F) — Test / Code-Qualitaet
+hypothesis                # property-based testing
+# pixelmatch, looks-same: npm
+# ts-morph, eslint, biome, knip, madge: npm
+# clinic: npm (clinic.js — node-Profiler)
+
+# CI-Klasse 1 (Fix A1): W3-RAG, self-contained pip-Wheels.
+# supriya und txtai bleiben RESERVED (Klasse 3): supriya braucht
+# scsynth-Server im CI-Container, txtai schleppt cuda-toolkit + torch
+# (>2 GB) an -- beide gemessen im Werkzeug-Manifest-Klassifizierungslauf.
+fastembed                 # W3 Neural-RAG (BGE via HF, ONNX-Runtime)

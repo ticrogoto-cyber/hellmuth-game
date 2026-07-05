@@ -1,0 +1,231 @@
+{
+  "apotheke": {
+    "name": "Apotheke",
+    "faction": "hellmuth",
+    "role": "hq",
+    "hp": 1200,
+    "pop_kap": 5,
+    "grundflaeche": {
+      "w": 2,
+      "h": 2
+    },
+    "produziert": [
+      "sammler",
+      "apotheker",
+      "destillateur"
+    ],
+    "ruestung": 3,
+    "kosten": {
+      "botanicals": 400,
+      "reinwasser": 250
+    },
+    "bauzeit": 40,
+    "baubar": true
+  },
+  "hain": {
+    "name": "Hain",
+    "faction": "hellmuth",
+    "role": "resource",
+    "hp": 500,
+    "ressource": "botanicals",
+    "vorrat": 1500,
+    "grundflaeche": {
+      "w": 1,
+      "h": 1
+    },
+    "ruestung": 0
+  },
+  "quelle": {
+    "name": "Quelle",
+    "faction": "hellmuth",
+    "role": "resource",
+    "hp": 500,
+    "ressource": "reinwasser",
+    "vorrat": 1000,
+    "grundflaeche": {
+      "w": 1,
+      "h": 1
+    },
+    "ruestung": 0
+  },
+  "beet": {
+    "name": "Beet",
+    "faction": "hellmuth",
+    "role": "supply",
+    "hp": 500,
+    "pop_kap": 5,
+    "kosten": {
+      "botanicals": 100
+    },
+    "bauzeit": 18,
+    "grundflaeche": {
+      "w": 2,
+      "h": 2
+    },
+    "baubar": true,
+    "ruestung": 1
+  },
+  "labor": {
+    "name": "Labor",
+    "faction": "hellmuth",
+    "role": "upgrade",
+    "hp": 700,
+    "kosten": {
+      "botanicals": 150,
+      "reinwasser": 50
+    },
+    "bauzeit": 28,
+    "grundflaeche": {
+      "w": 2,
+      "h": 2
+    },
+    "baubar": true,
+    "ruestung": 1
+  },
+  "kuratorium": {
+    "name": "Kuratorium",
+    "faction": "hellmuth",
+    "role": "caster",
+    "hp": 650,
+    "kosten": {
+      "botanicals": 200,
+      "reinwasser": 100,
+      "destillat": 50
+    },
+    "bauzeit": 35,
+    "grundflaeche": {
+      "w": 2,
+      "h": 2
+    },
+    "baubar": true,
+    "requiresBuilding": "labor",
+    "produziert": [
+      "kurator",
+      "suchfalter",
+      "alchemist"
+    ],
+    "ruestung": 1
+  },
+  "destille": {
+    "name": "Destille",
+    "faction": "hellmuth",
+    "role": "production",
+    "hp": 600,
+    "kosten": {
+      "botanicals": 200,
+      "reinwasser": 150
+    },
+    "bauzeit": 30,
+    "grundflaeche": {
+      "w": 2,
+      "h": 2
+    },
+    "baubar": true,
+    "requiresBuilding": "labor",
+    "ruestung": 1
+  },
+  "zuckermaschine": {
+    "name": "Zuckermaschine",
+    "faction": "moderat",
+    "role": "hq",
+    "hp": 1200,
+    "pop_kap": 5,
+    "grundflaeche": {
+      "w": 2,
+      "h": 2
+    },
+    "produziert": [
+      "sirup_trupp",
+      "stahlbrute",
+      "schleuderer"
+    ],
+    "ruestung": 3
+  },
+  "raffinerie": {
+    "name": "Raffinerie",
+    "faction": "moderat",
+    "role": "upgrade",
+    "hp": 700,
+    "kosten": {
+      "botanicals": 150,
+      "destillat": 50
+    },
+    "bauzeit": 28,
+    "grundflaeche": {
+      "w": 2,
+      "h": 2
+    },
+    "baubar": true,
+    "ruestung": 1
+  },
+  "schlickwerk": {
+    "name": "Schlickwerk",
+    "faction": "moderat",
+    "role": "production",
+    "hp": 650,
+    "kosten": {
+      "botanicals": 150
+    },
+    "bauzeit": 24,
+    "grundflaeche": {
+      "w": 2,
+      "h": 2
+    },
+    "baubar": true,
+    "requiresBuilding": "raffinerie",
+    "produziert": [
+      "rohrkanone",
+      "toxischer_nebler"
+    ],
+    "ruestung": 1
+  },
+  "gaertank": {
+    "name": "Gärtank",
+    "faction": "moderat",
+    "role": "supply",
+    "hp": 500,
+    "pop_kap": 5,
+    "kosten": {
+      "botanicals": 100
+    },
+    "bauzeit": 18,
+    "grundflaeche": {
+      "w": 2,
+      "h": 2
+    },
+    "ruestung": 1
+  },
+  "vorposten": {
+    "name": "Vorposten",
+    "faction": "moderat",
+    "role": "defense",
+    "hp": 800,
+    "kosten": {
+      "botanicals": 120,
+      "destillat": 40
+    },
+    "bauzeit": 22,
+    "grundflaeche": {
+      "w": 2,
+      "h": 2
+    },
+    "ruestung": 4,
+    "schaden": 10,
+    "reichweite": 5,
+    "angriffstempo": 0.7,
+    "angriffstyp": "fern"
+  },
+  "destillatsickerung": {
+    "name": "Destillatsickerung",
+    "faction": "moderat",
+    "role": "resource",
+    "hp": 500,
+    "ressource": "destillat",
+    "vorrat": 1200,
+    "grundflaeche": {
+      "w": 1,
+      "h": 1
+    },
+    "ruestung": 0
+  }
+}

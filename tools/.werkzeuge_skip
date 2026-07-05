@@ -1,0 +1,7 @@
+# Eintraege in dieser Datei lassen `werkzeuge_check.py` einzelne Hebel als SKIP
+# durchgehen, statt FAIL. Format: ein skip_key pro Zeile (siehe Hebel-Tabelle in
+# werkzeuge_check.py).
+#
+# Beispiele (auskommentiert, je nach venv aktivieren):
+# bpy                 # Bild-Cluster-venv (numpy>=2) ueberspringt bpy bewusst.
+# open3d-bildcluster  # Bild-Cluster-venv ueberspringt die 3D-Cluster-Werkzeuge.

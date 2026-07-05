@@ -1,0 +1,241 @@
+/* design_system.css — geteilte Design-Sprache fuer alle Pre-Game-Screens
+ * (Florilegium-UI + Menue-Familie). Wahrheit laut CODE2-DESIGN-SPEC:
+ * Hellmuth-Soda-Typografie auf Kokos-und-Zitrone-Dunkelgrund.
+ *
+ * Diese Datei definiert NUR Tokens, @font-face und die typografische Hierarchie.
+ * Sie wird von florilegium.css und der Menue-Familie importiert; konkrete
+ * Layouts leben in den jeweiligen Komponenten-CSS. */
+
+/* --- Fonts ---------------------------------------------------------------- */
+/* Dateien liegen unter public/fonts/ (aus dem Hellmuth-Source-Repo, Wurzel). */
+@font-face {
+  font-family: "Printvetica";
+  src: url("/fonts/PRINTVETICA.OTF") format("opentype");
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fournier Pro";
+  src: url("/fonts/FOURNIERMTPRO-REGULAR.TTF") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fournier Pro";
+  src: url("/fonts/FOURNIERMTPRO-ITALIC.TTF") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Ligaturen global aus (Hellmuth-Soda macht es so). */
+.ds-root *,
+#florilegium *,
+#hellmuth-menu * {
+  font-feature-settings: "liga" 0, "clig" 0, "dlig" 0, "hlig" 0;
+  font-variant-ligatures: none;
+}
+
+/* --- Farb-Tokens ---------------------------------------------------------- */
+:root {
+  /* Hintergrund */
+  --bg-primary: #1a1a1a;     /* Haupthintergrund, kokos-und-zitrone-artig */
+  --bg-secondary: #242424;   /* Karten, Modal-Innenflaechen */
+  --bg-tertiary: #2e2e2e;    /* Hover-Zustaende, Trennlinien */
+
+  /* Schrift */
+  --text-primary: #f5f1e8;   /* Hauptschrift, leicht warm-cremig */
+  --text-secondary: #b8b2a4; /* Untertitel, Meta-Angaben */
+  --text-muted: #6b6760;     /* Datumsangaben, Quellen, Footer-Text */
+  --text-disabled: #4a4742;  /* Kampagne ausgegraut */
+
+  /* Akzent (sparsam, nur Buttons und aktive Zustaende) */
+  --accent: #e8b33a;         /* HELLMUTH-Gold, aus dem Banner */
+  --accent-hover: #f5c75a;
+  --accent-magenta: #b0186a; /* Sirup-Magenta (MODERAT), Hintergrund-Glow */
+  --accent-magenta-glow: rgba(176, 24, 106, 0.35);
+  --accent-green: #4a6741;  /* Botanik-Gruen (HELLMUTH), Hover-Borduere */
+  --accent-green-glow: rgba(74, 103, 65, 0.4);
+
+  /* Trennlinien */
+  --divider: #3a3733;
+
+  /* Schatten */
+  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.6);
+
+  /* Bild-Verhaeltnis Florilegium (Ticro: 168.956 zu 120.866) */
+  --florilegium-image-ratio: 168.956 / 120.866;
+
+  /* Spacing-Token (8er-Modul mit 4er-Mikrostufe, Editorial-Konvention).
+   * Verbindlich für die Menue-Familie und das Florilegium. */
+  --space-2xs: 4px;
+  --space-xs:  8px;
+  --space-s:   16px;
+  --space-m:   24px;
+  --space-l:   32px;
+  --space-xl:  48px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+}
+
+/* --- Typografische Hierarchie --------------------------------------------- */
+/* Wiederverwendbare Klassen; Komponenten haengen sie an oder erben die Werte. */
+
+.title-display {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 700;
+  font-size: clamp(48px, 6vw, 96px);
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.headline {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 700;
+  font-size: 42px;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-family: "Fournier Pro", serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--text-secondary);
+}
+
+.menu-item {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.menu-item:hover {
+  color: var(--accent);
+}
+.menu-item.disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.meta-line {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.body {
+  font-family: "Fournier Pro", serif;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.55; /* Serif braucht weniger als Sans bei 17px */
+  color: var(--text-primary);
+  max-width: 65ch;   /* ~680px, Lese-Optimum */
+}
+.body em,
+.body i {
+  font-family: "Fournier Pro", serif;
+  font-style: italic;
+}
+
+.citation {
+  font-family: "Fournier Pro", serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.btn {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  border: 1px solid var(--text-primary);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.btn-primary {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+}
+.btn:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
+  border-color: var(--accent);
+}
+.btn:disabled,
+.btn.disabled {
+  color: var(--text-disabled);
+  border-color: var(--divider);
+  background: transparent;
+  cursor: not-allowed;
+}
+
+.footer-text {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.footer-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.footer-link:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* --- Focus-Ring (A11y Pflicht). Gold-Outline + Offset, nur via Tastatur. ---
+ * `:focus-visible` lasst Maus-Klicks ohne Ring durchgehen, gibt Tastatur-
+ * Usern aber durchgehend einen sichtbaren Anker. Gilt fuer alle Komponenten
+ * unter den Code2-DOM-Staemmen. */
+#florilegium :focus-visible,
+#hellmuth-menu :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+/* Buttons mit eigenen Borders nicht doppelt umranden -- nur den Outline-Ring. */
+#florilegium button:focus-visible,
+#hellmuth-menu button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Reduced Motion: Hover-/Focus-Uebergaenge ausschalten. */
+@media (prefers-reduced-motion: reduce) {
+  #florilegium *,
+  #hellmuth-menu * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Florilegium-Bild im festen Verhaeltnis (object-fit cover gegen Verzerrung). */
+.florilegium-image {
+  aspect-ratio: var(--florilegium-image-ratio);
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--bg-secondary);
+}
+.florilegium-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

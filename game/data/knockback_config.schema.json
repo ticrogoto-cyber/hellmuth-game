@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "hellmuth/knockback_config",
+  "title": "HELLMUTH Knockback-Konfiguration",
+  "description": "Tunebare Knockback-Werte + Massen-Tabelle. Quelle: SOLUTIONS-KNOCKBACK-PHYSIK.md §3.4 (Tuning) + §4.1 (Massen-Tiers). immovable nutzt einen grossen endlichen Massenwert (JSON kennt kein Infinity); isStatic=true ist die Wahrheit fuer Unbeweglichkeit.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "massTiers", "tuning"],
+  "properties": {
+    "version": { "type": "integer", "minimum": 1 },
+    "massTiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["featherweight", "medium", "heavy", "bulwark", "immovable"],
+      "properties": {
+        "featherweight": { "$ref": "#/$defs/massEntry" },
+        "medium": { "$ref": "#/$defs/massEntry" },
+        "heavy": { "$ref": "#/$defs/massEntry" },
+        "bulwark": { "$ref": "#/$defs/massEntry" },
+        "immovable": { "$ref": "#/$defs/massEntry" }
+      }
+    },
+    "tuning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "force",
+        "decayPerFrame60",
+        "maxTravelPx",
+        "decayTravelFactor",
+        "staggerMinMs",
+        "staggerMaxMs",
+        "staggerScalePerImpulse",
+        "edgeEpsilon"
+      ],
+      "properties": {
+        "force": { "type": "number", "exclusiveMinimum": 0, "description": "Impuls am Epizentrum (Default 350)." },
+        "decayPerFrame60": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1,
+          "description": "Geschwindigkeits-Decay je Frame @60Hz (Default 0.88). >=1 waere Beschleunigung -> verboten."
+        },
+        "maxTravelPx": { "type": "number", "exclusiveMinimum": 0, "description": "Harte Travel-Cap (Default 128 = 4 Tiles bei 32px)." },
+        "decayTravelFactor": { "type": "number", "exclusiveMinimum": 0, "description": "Projektion Impuls->Reichweite (Default 0.4)." },
+        "staggerMinMs": { "type": "number", "minimum": 0, "description": "Untergrenze Stagger (Default 150)." },
+        "staggerMaxMs": { "type": "number", "minimum": 0, "description": "Obergrenze Stagger (Default 600; darueber waere es ein Stun)." },
+        "staggerScalePerImpulse": { "type": "number", "minimum": 0, "description": "ms Stagger je Impuls-Punkt (Default 0.8)." },
+        "edgeEpsilon": { "type": "number", "minimum": 0, "description": "Float-Epsilon gegen Ghost-Hit am Radius-Rand (Default 0.001)." }
+      }
+    }
+  },
+  "$defs": {
+    "massEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mass", "kbMult", "isStatic"],
+      "properties": {
+        "mass": { "type": "number", "exclusiveMinimum": 0, "description": "Numerisch fuer sqrt(mass)-Daempfung. immovable: grosser endlicher Wert." },
+        "kbMult": { "type": "number", "minimum": 0, "description": "Tier-Multiplikator; 0 = unverschiebbar." },
+        "isStatic": { "type": "boolean" }
+      }
+    }
+  }
+}

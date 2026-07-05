@@ -1,0 +1,18 @@
+{
+  "id": "apothekerin",
+  "category": "einheiten",
+  "title": "Die Apothekerin",
+  "order": 1,
+  "unlock": {
+    "type": "always",
+    "trigger": null
+  },
+  "image": "florilegium/einheiten/apothekerin.png",
+  "audio": "florilegium/einheiten/apothekerin.ogg",
+  "text": "Die Apothekerin trägt drei Phiolen am Gürtel. Die erste ist immer leer. Helmuth schreibt in seinem Buch, wer destillieren will, muss zuerst lernen, wie Leere riecht. Wer das nicht ertragen kann, mischt Süßes hinein. Die Apothekerin trägt drei Phiolen, weil sie weiß, dass die Leere nicht eine Frage von einmal ist.",
+  "citation": {
+    "source": "Helmuths Buch",
+    "page": null
+  },
+  "tags": ["hellmuth", "schluesseleinheit", "hellmuth"]
+}

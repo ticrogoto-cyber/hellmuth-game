@@ -1,0 +1,37 @@
+{
+  "collision": [],
+  "cols": 36,
+  "doodads": [],
+  "groundTypes": [
+    "neutral",
+    "hellmuth",
+    "moderat"
+  ],
+  "meta": {
+    "author": "leer",
+    "created": "2026-06-11"
+  },
+  "name": "Leere Karte",
+  "nodes": [],
+  "rows": 36,
+  "spawns": [
+    {
+      "col": 6,
+      "faction": "hellmuth",
+      "player": 1,
+      "row": 30
+    },
+    {
+      "col": 30,
+      "faction": "moderat",
+      "player": 2,
+      "row": 6
+    }
+  ],
+  "terrain": {
+    "cells": [],
+    "default": 0
+  },
+  "version": 3,
+  "water": []
+}

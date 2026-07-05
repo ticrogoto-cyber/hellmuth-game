@@ -1,0 +1,12 @@
+{
+  "maps": [
+    {
+      "id": "first_clearing",
+      "name": "Die erste Lichtung",
+      "thumbnail": "maps/first_clearing_thumb.png",
+      "description": "Eine kleine Karte für den Einstieg.",
+      "size": "small",
+      "max_players": 2
+    }
+  ]
+}

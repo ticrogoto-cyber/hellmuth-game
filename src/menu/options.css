@@ -1,0 +1,152 @@
+/* Optionen-Menue. Vertikale Sektion-Tabs links, Inhalt rechts
+ * (Subagent #3, Stellaris/ME2-Pattern). Future-proof fuer mehr Sektionen. */
+.options {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.options-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  border-right: 1px solid var(--divider);
+  padding-right: var(--space-s);
+}
+.options-tab {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-right: 2px solid transparent;
+  color: var(--text-secondary);
+  padding: var(--space-xs) var(--space-s);
+  cursor: pointer;
+  margin-right: -1px;
+}
+.options-tab:hover {
+  color: var(--text-primary);
+}
+.options-tab[aria-selected="true"] {
+  color: var(--accent);
+  border-right-color: var(--accent);
+}
+
+.options-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+  max-width: 640px;
+}
+
+/* Sliderzeile mit Mute + Numeric */
+.options-row {
+  display: grid;
+  grid-template-columns: 140px 32px 1fr 56px;
+  align-items: center;
+  gap: var(--space-s);
+}
+.options-row-label {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+.options-mute {
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid var(--divider);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: "Printvetica", sans-serif;
+  font-size: 14px;
+  padding: 0;
+}
+.options-mute:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.options-mute[aria-pressed="true"] {
+  border-color: var(--text-muted);
+  color: var(--text-muted);
+}
+.options-row input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+.options-row-value {
+  font-family: "Printvetica", sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+/* Toggle + Sprachwahl */
+.options-toggle {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--divider);
+  color: var(--text-secondary);
+  padding: var(--space-xs) var(--space-s);
+  cursor: pointer;
+  justify-self: start;
+  width: fit-content;
+}
+.options-toggle[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.options-lang {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--divider);
+  width: fit-content;
+}
+.options-lang button {
+  font-family: "Printvetica", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 0;
+  border-right: 1px solid var(--divider);
+  color: var(--text-secondary);
+  padding: var(--space-xs) var(--space-s);
+  cursor: pointer;
+}
+.options-lang button:last-child {
+  border-right: 0;
+}
+.options-lang button[aria-checked="true"] {
+  background: var(--bg-secondary);
+  color: var(--accent);
+}
+.options-lang button:disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.options-stub {
+  font-family: "Fournier Pro", serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-muted);
+}

@@ -1,0 +1,27 @@
+[
+  { "slot": "strip_h", "faction": "moderat", "source": "moderat_strip_h_e", "pipeline": "master", "out": "sprites/ui/hud/v3/moderat/strip_h/strip_h_e.png" },
+  { "slot": "strip_v", "faction": "moderat", "source": "moderat_strip_v_e", "pipeline": "master", "out": "sprites/ui/hud/v3/moderat/strip_v/strip_v_e.png" },
+  { "slot": "corner", "faction": "moderat", "source": "moderat_corner_a", "pipeline": "raw", "out": "sprites/ui/hud/v3/moderat/corner/corner_a.png", "optional": true },
+  { "slot": "corner", "faction": "moderat", "source": "moderat_corner_b", "pipeline": "raw", "out": "sprites/ui/hud/v3/moderat/corner/corner_b.png", "optional": true },
+  { "slot": "sigil", "faction": "moderat", "source": "moderat_sigil_a", "pipeline": "raw", "out": "sprites/ui/hud/v3/moderat/sigil/sigil_a.png" },
+  { "slot": "hero", "faction": "moderat", "source": "moderat_v_hero_slot_d", "pipeline": "raw", "out": "sprites/ui/hud/v3/moderat/hero/hero_slot_d.png" },
+  { "slot": "eye", "faction": "moderat", "source": "moderat_eye", "pipeline": "raw", "out": "sprites/ui/hud/v3/moderat/eye/eye.png" },
+  { "slot": "topleft", "faction": "moderat", "source": "moderat_v_topleft_d", "pipeline": "raw", "out": "sprites/ui/hud/v3/moderat/topleft/topleft_d.png", "optional": true },
+  { "slot": "backdrop", "faction": "moderat", "source": "moderat_backdrop", "pipeline": "master", "out": "sprites/ui/hud/v3/moderat/backdrop/backdrop.png", "optional": true },
+  { "slot": "glow_edge", "faction": "moderat", "source": "moderat_glow_edge", "pipeline": "master", "out": "sprites/ui/hud/v3/moderat/glow_edge/glow_edge.png", "optional": true },
+
+  { "slot": "strip_h", "faction": "hellmuth", "source": "hellmuth_strip_h_a", "pipeline": "master", "out": "sprites/ui/hud/v3/hellmuth/strip_h/strip_h_a.png" },
+  { "slot": "strip_h", "faction": "hellmuth", "source": "hellmuth_strip_h_b", "pipeline": "master", "out": "sprites/ui/hud/v3/hellmuth/strip_h/strip_h_b.png" },
+  { "slot": "strip_v", "faction": "hellmuth", "source": "hellmuth_strip_v_a", "pipeline": "master", "out": "sprites/ui/hud/v3/hellmuth/strip_v/strip_v_a.png" },
+  { "slot": "corner", "faction": "hellmuth", "source": "hellmuth_corner_a", "pipeline": "raw", "out": "sprites/ui/hud/v3/hellmuth/corner/corner_a.png" },
+  { "slot": "corner", "faction": "hellmuth", "source": "hellmuth_corner_g", "pipeline": "raw", "out": "sprites/ui/hud/v3/hellmuth/corner/corner_g.png" },
+  { "slot": "topleft", "faction": "hellmuth", "source": "hellmuth_v_topleft_a", "pipeline": "raw", "out": "sprites/ui/hud/v3/hellmuth/topleft/topleft_a.png" },
+  { "slot": "sigil", "faction": "hellmuth", "source": "hellmuth_sigil_b", "pipeline": "raw", "out": "sprites/ui/hud/v3/hellmuth/sigil/sigil_b.png" },
+  { "slot": "hero", "faction": "hellmuth", "source": "hellmuth_v_hero_anschluss_g", "pipeline": "raw", "out": "sprites/ui/hud/v3/hellmuth/hero/hero_anschluss_g.png" },
+  { "slot": "begleiter", "faction": "hellmuth", "source": "hellmuth_v_gridres_b", "pipeline": "raw", "out": "sprites/ui/hud/v3/hellmuth/begleiter/gridres_b.png", "optional": true },
+  { "slot": "backdrop", "faction": "hellmuth", "source": "hellmuth_backdrop", "pipeline": "master", "out": "sprites/ui/hud/v3/hellmuth/backdrop/backdrop.png", "optional": true },
+  { "slot": "glow_edge", "faction": "hellmuth", "source": "hellmuth_glow_edge", "pipeline": "master", "out": "sprites/ui/hud/v3/hellmuth/glow_edge/glow_edge.png", "optional": true },
+
+  { "slot": "emblem_corner", "faction": "hellmuth", "source": "hellmuth_v_topleft_gpt_a", "pipeline": "raw", "out": "sprites/ui/hud/emblem_corner/hellmuth.png" },
+  { "slot": "emblem_corner", "faction": "moderat", "source": "moderat_v_topleft_d", "pipeline": "raw", "out": "sprites/ui/hud/emblem_corner/moderat.png" }
+]

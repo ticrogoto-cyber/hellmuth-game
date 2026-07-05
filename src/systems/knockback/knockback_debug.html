@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>HELLMUTH — Knockback Debug-Visualizer</title>
+    <style>
+      body { margin: 0; background: #14110a; color: #cde3c8; font: 13px monospace; }
+      #wrap { display: flex; gap: 12px; padding: 12px; }
+      canvas { background: #1d1a12; border: 1px solid #3a3422; cursor: crosshair; }
+      #hud { white-space: pre; line-height: 1.5; }
+      b { color: #e8b33a; }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <canvas id="c" width="720" height="540"></canvas>
+      <div id="hud"></div>
+    </div>
+    <!--
+      Dev-Visualizer fuer die Knockback-Wucht (Solutions §9.3). Klick = Explosion.
+      Oeffnet per file:// OHNE Build/Server -- deshalb spiegelt dieses Tool die
+      Kern-Formel inline (quadratischer Falloff + sqrt(mass)-Daempfung + id-Jitter).
+      KANONISCHE QUELLE bleibt src/systems/knockback/knockback_system.ts; dieses
+      Tool dient nur der visuellen Iteration der Tuning-Werte, nicht dem Spiel.
+      Hooks fuer den Gate-Check H17: window.__kbDebugReady, window.__kbLastImpulse.
+    -->
+    <script>
+      const MASS = {
+        featherweight: { mass: 0.5, kbMult: 2.0, isStatic: false },
+        medium: { mass: 1.0, kbMult: 1.0, isStatic: false },
+        heavy: { mass: 4.0, kbMult: 0.35, isStatic: false },
+        bulwark: { mass: 20.0, kbMult: 0.05, isStatic: false },
+        immovable: { mass: Infinity, kbMult: 0, isStatic: true },
+      };
+      const TUNE = { force: 350, decay60: 0.88, maxTravel: 128, travelFactor: 0.4, edgeEps: 0.001 };
+      const GOLDEN = 2.399963229728653;
+      const COL = { featherweight: "#7fd14c", medium: "#cfe6f0", heavy: "#E8B33A", bulwark: "#B8860B", immovable: "#888" };
+
+      const cv = document.getElementById("c");
+      const ctx = cv.getContext("2d");
+      const hud = document.getElementById("hud");
+      const tiers = ["featherweight", "medium", "heavy", "bulwark"];
+      let id = 1;
+      const bodies = [];
+      for (let i = 0; i < 20; i++) {
+        const t = tiers[i % tiers.length];
+        bodies.push({ id: id++, x: 120 + (i % 5) * 120, y: 120 + ((i / 5) | 0) * 90, tier: t, vx: 0, vy: 0, rem: 0, stagger: 0 });
+      }
+      bodies.push({ id: id++, x: 360, y: 270, tier: "immovable", vx: 0, vy: 0, rem: 0, stagger: 0 });
+      const blasts = [];
+
+      function explode(ox, oy, R = 150, force = TUNE.force) {
+        let maxImp = 0;
+        for (const b of bodies) {
+          const m = MASS[b.tier];
+          if (m.isStatic || m.kbMult === 0) continue;
+          const dx = b.x - ox, dy = b.y - oy, d = Math.hypot(dx, dy);
+          if (d > R + TUNE.edgeEps) continue;
+          const f = d <= 0 ? 1 : (1 - Math.min(1, d / R)) ** 2;
+          if (f <= 0) continue;
+          const jit = (((b.id * GOLDEN) % 1) - 0.5) * 0.087;
+          let nx, ny;
+          if (d < 1) { nx = Math.cos(jit); ny = Math.sin(jit); }
+          else { const c = Math.cos(jit), s = Math.sin(jit); nx = (dx / d) * c - (dy / d) * s; ny = (dx / d) * s + (dy / d) * c; }
+          const imp = (force * f * m.kbMult) / Math.sqrt(m.mass);
+          const cur = Math.hypot(b.vx, b.vy);
+          if (imp >= cur) { b.vx = nx * imp; b.vy = ny * imp; } else { b.vx += nx * imp * 0.3; b.vy += ny * imp * 0.3; }
+          b.rem = Math.min(imp * TUNE.travelFactor, TUNE.maxTravel);
+          b.stagger = Math.min(600, Math.max(150, 150 + imp * 0.8));
+          maxImp = Math.max(maxImp, imp);
+        }
+        blasts.push({ x: ox, y: oy, r: R, age: 0 });
+        window.__kbLastImpulse = { x: ox, y: oy, mag: maxImp };
+      }
+
+      let last = performance.now();
+      function frame(now) {
+        const dt = Math.min(50, now - last) / 1000;
+        last = now;
+        const decay = Math.pow(TUNE.decay60, dt * 60);
+        for (const b of bodies) {
+          if (b.stagger > 0) b.stagger = Math.max(0, b.stagger - dt * 1000);
+          const mag = Math.hypot(b.vx, b.vy);
+          if (mag < 1 || b.rem <= 0) { b.vx = 0; b.vy = 0; continue; }
+          let sx = b.vx * dt, sy = b.vy * dt;
+          const sl = Math.hypot(sx, sy);
+          if (sl > b.rem) { const k = b.rem / sl; sx *= k; sy *= k; }
+          b.x += sx; b.y += sy; b.rem -= Math.hypot(sx, sy);
+          b.vx *= decay; b.vy *= decay;
+        }
+        ctx.clearRect(0, 0, cv.width, cv.height);
+        for (let i = blasts.length - 1; i >= 0; i--) {
+          const bl = blasts[i]; bl.age += dt * 1000;
+          if (bl.age > 600) { blasts.splice(i, 1); continue; }
+          ctx.strokeStyle = `rgba(232,179,58,${1 - bl.age / 600})`;
+          ctx.beginPath(); ctx.arc(bl.x, bl.y, bl.r, 0, Math.PI * 2); ctx.stroke();
+        }
+        for (const b of bodies) {
+          ctx.fillStyle = COL[b.tier];
+          ctx.beginPath(); ctx.arc(b.x, b.y, 7, 0, Math.PI * 2); ctx.fill();
+          if (Math.hypot(b.vx, b.vy) > 1) {
+            ctx.strokeStyle = "#7fd14c"; ctx.beginPath(); ctx.moveTo(b.x, b.y);
+            ctx.lineTo(b.x + b.vx * 0.1, b.y + b.vy * 0.1); ctx.stroke();
+          }
+        }
+        const moving = bodies.filter((b) => Math.hypot(b.vx, b.vy) > 1).length;
+        hud.textContent =
+          `HELLMUTH Knockback-Visualizer\n\nKlick = Explosion (r=150, force=${TUNE.force})\n\n` +
+          `Bodies: ${bodies.length}\nin Bewegung: ${moving}\naktive Blasts: ${blasts.length}\n` +
+          `letzter Impuls: ${window.__kbLastImpulse ? window.__kbLastImpulse.mag.toFixed(1) : "-"}\n\n` +
+          `Tiers: featherweight(2.0) medium(1.0)\n       heavy(0.35) bulwark(0.05)\n       immovable(0, fix)`;
+        requestAnimationFrame(frame);
+      }
+
+      cv.addEventListener("click", (e) => {
+        const r = cv.getBoundingClientRect();
+        explode(e.clientX - r.left, e.clientY - r.top);
+      });
+      requestAnimationFrame((t) => {
+        last = t;
+        frame(t);
+        window.__kbDebugReady = true;
+      });
+    </script>
+  </body>
+</html>

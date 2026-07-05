@@ -1,0 +1,23 @@
+# Audio-Cluster — kann mit Bild-Cluster venv gemeinsam laufen (numpy >= 2 ok).
+# Eigenes venv empfohlen, weil scipy<1.15 fuer spaudiopy gepinnt.
+#
+# Eigenes venv:  python3 -m venv .venv-audio && source .venv-audio/bin/activate
+#                pip install -r requirements-audio.txt
+# Apt: pure-data, sox  (Pure-Data fuer headless-Patches; Sox fuer pysox).
+
+# Welle 1 (CONTAINER-WERKZEUGE.md)
+imageio-ffmpeg            # bundled static ffmpeg-7 binary
+pydub
+pyloudnorm
+soundfile
+# piper-tts kommt mit eigener Stimme von GitHub-Release, nicht pip.
+piper-tts
+
+# Welle 2 (CONTAINER-WERKZEUGE-WELLE2-C.md, Commit 429d181) — Audio
+pedalboard                # Spotify, Effekt-Ketten + Side-Chain Ducking
+librosa                   # Onset/Tempo/MFCC
+pysox                     # apt sox + python-Wrapper
+pyroomacoustics           # Shoebox RT60
+spaudiopy                 # Ambisonics; braucht scipy<1.15
+scipy<1.15
+# jsfxr lebt im npm-Cluster (siehe package.json).
